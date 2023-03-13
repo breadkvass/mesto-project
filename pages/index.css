@@ -1,0 +1,43 @@
+@import url(../vendor/fonts.css);
+
+@import url(../vendor/normalize.css);
+
+@import url(../blocks/page/page.css);
+
+@import url(../blocks/header/header.css);
+@import url(../blocks/header/__logo/header__logo.css);
+
+@import url(../blocks/profile/profile.css);
+@import url(../blocks/profile/__container/profile__container.css);
+@import url(../blocks/profile/__avatar/profile__avatar.css);
+@import url(../blocks/profile/__button/profile__button.css);
+@import url(../blocks/profile/__button/_sign/profile__button_sign.css);
+@import url(../blocks/profile/__description/profile__description.css);
+@import url(../blocks/profile/__info/profile__info.css);
+@import url(../blocks/profile/__name/profile__name.css);
+@import url(../blocks/profile/__change-name/profile__change-name.css);
+@import url(../blocks/profile/__write-name/profile__write-name.css);
+
+@import url(../blocks/elements-grid/elements-grid.css);
+@import url(../blocks/elements-grid/__caption/elements-grid__caption.css);
+@import url(../blocks/elements-grid/__item/elements-grid__item.css);
+@import url(../blocks/elements-grid/__like/elements-grid__like.css);
+@import url(../blocks/elements-grid/__name/elements-grid__name.css);
+@import url(../blocks/elements-grid/__photo/elements-grid__photo.css);
+
+@import url(../blocks/invisible-checkbox/invisible-checkbox.css);
+@import url(../blocks/visible-checkbox/visible-checkbox.css);
+
+@import url(../blocks/popup/popup.css);
+@import url(../blocks/popup/_opened/popup_opened.css);
+@import url(../blocks/popup/__container/popup__container.css);
+@import url(../blocks/popup/__container/_close-button/popup__container_close-button.css);
+@import url(../blocks/popup/__header/popup__header.css);
+
+@import url(../blocks/form/form.css);
+@import url(../blocks/form/__description/form__description.css);
+@import url(../blocks/form/__name/form__name.css);
+@import url(../blocks/form/__button/form__button.css);
+
+@import url(../blocks/footer/footer.css);
+@import url(../blocks/footer/__copywrite/footer__copywrite.css);

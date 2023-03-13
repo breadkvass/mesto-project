@@ -1,0 +1,7 @@
+.elements-grid__item {
+    box-sizing: content-box;
+    border-radius: 10px;
+    margin: 0;
+    background-color: white;
+    overflow: hidden;
+}

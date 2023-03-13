@@ -1,0 +1,16 @@
+.profile__description {
+    padding-top: 16px;
+    font-size: 18px;
+    line-height: 21.78px;
+    font-weight: 400;
+    margin: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .profile__description {
+        padding-top: 14px;
+        font-size: 14px;
+        line-height: 17px;
+        text-align: center;
+    }
+}
