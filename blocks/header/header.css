@@ -2,7 +2,7 @@
     width: calc(100% - 200px);
     margin: 0 auto;
     padding-top: 45px;
-    height: 74px;
+    padding-bottom: 41px;
     border-bottom: 1px solid rgba(84, 84, 84, .7);
 }
 
@@ -22,6 +22,6 @@
     .header {
         width: 100%;
         padding-top: 28px;
-        height: 56px;
+        padding-bottom: 31px;
     }
 }

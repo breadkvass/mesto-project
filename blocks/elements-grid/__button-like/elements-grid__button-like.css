@@ -1,0 +1,18 @@
+.elements-grid__button-like {
+    border: 0;
+    background-image: url(../../../images/heart.svg);
+    background-size: cover;
+    background-color: white;
+    width: 22px;
+    height: 19px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.elements-grid__button-like:hover {
+    background-image: url(../../../images/heart-grey.svg);
+}
+
+.elements-grid__button-like:focus {
+    background-image: url(../../../images/heart-black.svg);
+}

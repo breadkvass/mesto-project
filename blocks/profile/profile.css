@@ -24,6 +24,5 @@
     .profile {
         width: calc(100% - 38px);
         flex-direction: column;
-        padding-top: 42px;
     }
 }

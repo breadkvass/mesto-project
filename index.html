@@ -15,98 +15,81 @@
 			<div class="profile__container">
 				<img class="profile__avatar" src="images/Profile.png" alt="Ваш аватар">
 				<div class="profile__info">
-					<div class="profile__name">
-						<h1 class="profile__write-name">Жак-Ив Кусто<img class="profile__change-name" src="images/pen.svg" alt="Изменить имя"></h1>
-					</div>
+					<h1 class="profile__write-name">Жак-Ив Кусто</h1>
+					<button class="profile__change-name-button" type="button">
+						<img class="profile__pen-image" src="images/pen.svg" alt="Изменить имя">
+					</button>
 					<h3 class="profile__description">Исследователь океана</h3>
 				</div>
 			</div>
-			<div  class="profile__button">
+			<button class="profile__button">
 				<img class="profile__button_sign" src="images/plus-sign.svg" alt="Добавить">
-			</div>
+			</button>
 		</section>
 		<section class="elements-grid" aria-label="Места">
 
-			<figure class="elements-grid__item">
+			<div class="elements-grid__item">
 				<img class="elements-grid__photo" src="images/Karachaevsk.png" alt="Карачаевск">
-				<figcaption class="elements-grid__caption">
-					<h3 class="elements-grid__name">Карачаевск</h3>
-					<label class="visible-checkbox" for="invisible-1">
-						<input type="checkbox" class="invisible-checkbox" id="invisible-1">
-						<span></span>
-					</label>
-				</figcaption>
-			</figure>
+				<div class="elements-grid__caption">
+					<h4 class="elements-grid__name">Карачаевск</h4>
+					<button class="elements-grid__button-like" type="button"></button>
+				</div>
+			</div>
 
-			<figure class="elements-grid__item">
+			<div class="elements-grid__item">
 				<img class="elements-grid__photo" src="images/Elbrus.png" alt="Гора Эльбрус">
-				<figcaption class="elements-grid__caption">
-					<h3 class="elements-grid__name">Гора Эльбрус</h3>
-					<label class="visible-checkbox" for="invisible-2">
-						<input type="checkbox" class="invisible-checkbox" id="invisible-2">
-						<span></span>
-					</label>
-				</figcaption>
-			</figure>
+				<div class="elements-grid__caption">
+					<h4 class="elements-grid__name">Гора Эльбрус</h4>
+					<button class="elements-grid__button-like" type="button"></button>
+				</div>
+			</div>
 
-			<figure class="elements-grid__item">
+			<div class="elements-grid__item">
 				<img class="elements-grid__photo" src="images/Dombay.png" alt="Домбай">
-				<figcaption class="elements-grid__caption">
-					<h3 class="elements-grid__name">Домбай</h3>
-					<label class="visible-checkbox" for="invisible-3">
-						<input type="checkbox" class="invisible-checkbox" id="invisible-3">
-						<span></span>
-					</label>
-				</figcaption>
-			</figure>
+				<div class="elements-grid__caption">
+					<h4 class="elements-grid__name">Домбай</h4>
+					<button class="elements-grid__button-like" type="button"></button>
+				</div>
+			</div>
 
-			<figure class="elements-grid__item">
+			<div class="elements-grid__item">
 				<img class="elements-grid__photo" src="images/Elbrus.png" alt="Гора Эльбрус">
-				<figcaption class="elements-grid__caption">
-					<h3 class="elements-grid__name">Гора Эльбрус</h3>
-					<label class="visible-checkbox" for="invisible-4">
-						<input type="checkbox" class="invisible-checkbox" id="invisible-4">
-						<span></span>
-					</label>
-				</figcaption>
-			</figure>
+				<div class="elements-grid__caption">
+					<h4 class="elements-grid__name">Гора Эльбрус</h4>
+					<button class="elements-grid__button-like" type="button"></button>
+				</div>
+			</div>
 
-			<figure class="elements-grid__item">
+			<div class="elements-grid__item">
 				<img class="elements-grid__photo" src="images/Dombay.png" alt="Домбай">
-				<figcaption class="elements-grid__caption">
-					<h3 class="elements-grid__name">Домбай</h3>
-					<label class="visible-checkbox" for="invisible-5">
-						<input type="checkbox" class="invisible-checkbox" id="invisible-5">
-						<span></span>
-					</label>
-				</figcaption>
-			</figure>
+				<div class="elements-grid__caption">
+					<h4 class="elements-grid__name">Домбай</h4>
+					<button class="elements-grid__button-like" type="button"></button>
+				</div>
+			</div>
 
-			<figure class="elements-grid__item">
+			<div class="elements-grid__item">
 				<img class="elements-grid__photo" src="images/Karachaevsk.png" alt="Карачаево-Черкессия">
-				<figcaption class="elements-grid__caption">
-					<h3 class="elements-grid__name">Карачаево-Черкессия</h3>
-					<label class="visible-checkbox" for="invisible-6">
-						<input type="checkbox" class="invisible-checkbox" id="invisible-6">
-						<span></span>
-					</label>
-				</figcaption>
-			</figure>
+				<div class="elements-grid__caption">
+					<h4 class="elements-grid__name">Карачаево-Черкессия</h4>
+					<button class="elements-grid__button-like" type="button"></button>
+				</div>
+			</div>
 
 		</section>
 		<section class="popup">
 			<div class="popup__container">
-				<img class="popup__container_close-button" src="images/close-icon.svg" alt="Закрыть">
-				<h2 class="popup__header">Редактировать профиль</h2>
-				<form class="form">
-					<input class="form__name" type="text" placeholder="Жак-Ив Кусто">
-					<input class="form__description" placeholder="Исследователь океана">
+				<img class="popup__close-button" src="images/close-icon.svg" alt="Закрыть">
+				<h3 class="popup__header">Редактировать профиль</h3>
+				<form class="form" name="form-profile">
+					<input class="form__input" type="text" placeholder="Жак-Ив Кусто" name="form-name">
+					<input class="form__input" placeholder="Исследователь океана" name="form-description">
 					<button class="form__button" type="submit">Сохранить</button>
 				</form>
 			</div>
 		</section>
 	</main>
 	<footer class="footer">
-		<p class="footer__copywrite">© 2023 Mesto Russia</p>
+		<p class="footer__copyright">© 2023 Mesto Russia</p>
 	</footer>
 </body>
