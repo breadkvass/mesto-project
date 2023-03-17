@@ -1,0 +1,9 @@
+.popup__button {
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+}
+
+.popup__button:hover {
+    opacity: .6;
+}

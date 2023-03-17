@@ -1,4 +1,4 @@
-.profile__change-name-button {
+.profile__button_edit {
     width: 24px;
     height: 24px;
     border: 1px solid white;
@@ -10,15 +10,10 @@
 }
 
 @media screen and (max-width: 767px) {
-    .profile__change-name-button {
+    .profile__button_edit {
         width: 18px;
         height: 18px;
         right: -28px;
         top: 33px;
     }
-}
-
-.profile__change-name-button:hover {
-    opacity: .6;
-    
 }

@@ -15,15 +15,15 @@
 			<div class="profile__container">
 				<img class="profile__avatar" src="images/Profile.png" alt="Ваш аватар">
 				<div class="profile__info">
-					<h1 class="profile__write-name">Жак-Ив Кусто</h1>
-					<button class="profile__change-name-button" type="button">
+					<h1 class="profile__header">Жак-Ив Кусто</h1>
+					<button class="profile__button profile__button_edit" type="button">
 						<img class="profile__pen-image" src="images/pen.svg" alt="Изменить имя">
 					</button>
-					<h3 class="profile__description">Исследователь океана</h3>
+					<p class="profile__description">Исследователь океана</p>
 				</div>
 			</div>
-			<button class="profile__button">
-				<img class="profile__button_sign" src="images/plus-sign.svg" alt="Добавить">
+			<button class="profile__button profile__button_add">
+				<img class="profile__plus-image" src="images/plus-sign.svg" alt="Добавить">
 			</button>
 		</section>
 		<section class="elements-grid" aria-label="Места">
@@ -77,14 +77,16 @@
 			</div>
 
 		</section>
-		<section class="popup">
+		<section class="popup popup_opened">
 			<div class="popup__container">
-				<img class="popup__close-button" src="images/close-icon.svg" alt="Закрыть">
-				<h3 class="popup__header">Редактировать профиль</h3>
+				<button class="popup__button popup__button_close" type="button">
+					<img class="popup__close-image" src="images/close-icon.svg" alt="Закрыть">
+				</button>
+				<h4 class="popup__header">Редактировать профиль</h4>
 				<form class="form" name="form-profile">
 					<input class="form__input" type="text" placeholder="Жак-Ив Кусто" name="form-name">
 					<input class="form__input" placeholder="Исследователь океана" name="form-description">
-					<button class="form__button" type="submit">Сохранить</button>
+					<button class="popup__button popup__button_save" type="submit">Сохранить</button>
 				</form>
 			</div>
 		</section>

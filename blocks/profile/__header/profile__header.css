@@ -1,17 +1,18 @@
-.profile__write-name {
+.profile__header {
     font-size: 42px;
     line-height: 48px;
     font-weight: 500;
     margin: 0;
     position: relative;
     letter-spacing: 0.5px;
+    max-width: 450px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
 
 @media screen and (max-width: 767px) {
-    .profile__write-name {
+    .profile__header {
         font-size: 27px;
         line-height: 32.68px;
         text-align: center;
