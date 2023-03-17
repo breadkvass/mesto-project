@@ -1,4 +1,4 @@
-.popup__button_save {
+.popup__button_type_save {
     width: 358px;
     color: white;
     background-color: black;
@@ -12,7 +12,7 @@
 }
 
 @media screen and (max-width: 767px) {
-    .popup__button_save {
+    .popup__button_type_save {
         width: 238px;
         height: 46px;
         font-size: 14px;
