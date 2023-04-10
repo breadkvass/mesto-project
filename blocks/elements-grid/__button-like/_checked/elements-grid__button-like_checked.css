@@ -1,0 +1,7 @@
+.elements-grid__button-like_checked {
+    background-image: url(../../../../images/heart-black.svg);
+}
+
+.elements-grid__button-like_checked:hover {
+    opacity: 1;
+}

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="pages/index.css">
+  <script src="pages/index.js"></script>
   <title>Место</title>
 </head>
 <body class="page">
@@ -27,67 +28,56 @@
 			</button>
 		</section>
 		<section class="elements-grid" aria-label="Места">
-
-			<div class="elements-grid__item">
-				<img class="elements-grid__photo" src="images/Karachaevsk.png" alt="Карачаевск">
-				<div class="elements-grid__caption">
-					<h4 class="elements-grid__name">Карачаевск</h4>
-					<button class="elements-grid__button-like" type="button"></button>
+			
+			<template id="template-grid">
+				<div class="elements-grid__item">
+					<button class="elements-grid__button-delete" type="button">
+						<img class="elements-grid__delete-image" src="images/delete-button.svg" alt="Удалить">
+					</button>
+					<img class="elements-grid__photo" alt="Фотография места">
+					<div class="elements-grid__caption">
+						<h4 class="elements-grid__name"></h4>
+						<button class="elements-grid__button-like" type="button"></button>
+					</div>
 				</div>
-			</div>
+			</template>
 
-			<div class="elements-grid__item">
-				<img class="elements-grid__photo" src="images/Elbrus.png" alt="Гора Эльбрус">
-				<div class="elements-grid__caption">
-					<h4 class="elements-grid__name">Гора Эльбрус</h4>
-					<button class="elements-grid__button-like" type="button"></button>
-				</div>
-			</div>
-
-			<div class="elements-grid__item">
-				<img class="elements-grid__photo" src="images/Dombay.png" alt="Домбай">
-				<div class="elements-grid__caption">
-					<h4 class="elements-grid__name">Домбай</h4>
-					<button class="elements-grid__button-like" type="button"></button>
-				</div>
-			</div>
-
-			<div class="elements-grid__item">
-				<img class="elements-grid__photo" src="images/Elbrus.png" alt="Гора Эльбрус">
-				<div class="elements-grid__caption">
-					<h4 class="elements-grid__name">Гора Эльбрус</h4>
-					<button class="elements-grid__button-like" type="button"></button>
-				</div>
-			</div>
-
-			<div class="elements-grid__item">
-				<img class="elements-grid__photo" src="images/Dombay.png" alt="Домбай">
-				<div class="elements-grid__caption">
-					<h4 class="elements-grid__name">Домбай</h4>
-					<button class="elements-grid__button-like" type="button"></button>
-				</div>
-			</div>
-
-			<div class="elements-grid__item">
-				<img class="elements-grid__photo" src="images/Karachaevsk.png" alt="Карачаево-Черкессия">
-				<div class="elements-grid__caption">
-					<h4 class="elements-grid__name">Карачаево-Черкессия</h4>
-					<button class="elements-grid__button-like" type="button"></button>
-				</div>
-			</div>
 
 		</section>
-		<section class="popup">
+		<section class="popup popup_editprofile">
 			<div class="popup__container">
 				<button class="popup__button popup__button_type_close" type="button">
 					<img class="popup__close-image" src="images/close-icon.svg" alt="Закрыть">
 				</button>
 				<h4 class="popup__header">Редактировать профиль</h4>
 				<form class="form" name="form-profile">
-					<input class="form__input" type="text" placeholder="Жак-Ив Кусто" name="form-name">
-					<input class="form__input" placeholder="Исследователь океана" name="form-description">
+					<input class="form__input form__input_type_name" type="text" placeholder="Жак-Ив Кусто" name="form-name">
+					<input class="form__input form__input_type_description" type="text" placeholder="Исследователь океана" name="form-description">
 					<button class="popup__button popup__button_type_save" type="submit">Сохранить</button>
 				</form>
+			</div>
+		</section>
+		<section class="popup popup_addplace">
+			<div class="popup__container">
+				<button class="popup__button popup__button_type_close" type="button">
+					<img class="popup__close-image" src="images/close-icon.svg" alt="Закрыть">
+				</button>
+				<h4 class="popup__header">Новое место</h4>
+				<form class="form" name="form-profile">
+					<input class="form__input form__input_type_name" type="text" placeholder="Горный" name="form-name">
+					<input class="form__input form__input_type_description" type="text" placeholder="https://unsplash.com/example.jpg" name="form-description">
+					<button class="popup__button popup__button_type_save" type="submit">Создать</button>
+				</form>
+			</div>
+		</section>
+
+		<section class="popup popup_photo-place">
+			<div class="popup__photo-container">
+				<button class="popup__button popup__button_type_close" type="button">
+					<img class="popup__close-image" src="images/close-icon.svg" alt="Закрыть">
+				</button>
+				<img class="popup__photo">
+				<p class="popup__description"></p>
 			</div>
 		</section>
 	</main>

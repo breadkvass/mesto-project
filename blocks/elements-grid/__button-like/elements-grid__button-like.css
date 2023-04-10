@@ -1,6 +1,6 @@
 .elements-grid__button-like {
     border: 0;
-    background-image: url(../../../images/heart.svg);
+    background-image: url(../../../../images/heart.svg);
     background-size: cover;
     background-color: white;
     width: 22px;
@@ -10,9 +10,5 @@
 }
 
 .elements-grid__button-like:hover {
-    background-image: url(../../../images/heart-grey.svg);
-}
-
-.elements-grid__button-like:focus {
-    background-image: url(../../../images/heart-black.svg);
+    opacity: .5;
 }
