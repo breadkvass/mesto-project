@@ -1,8 +1,9 @@
 .elements-grid__item {
     box-sizing: content-box;
     border-radius: 10px;
-    margin: 0;
+    margin: 0 auto;
     background-color: white;
     overflow: hidden;
     position: relative;
+    width: 282px;
 }
