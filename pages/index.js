@@ -26,6 +26,9 @@ const initialCards = [
     }
 ];
 
+const popup = document.querySelector('.popup');
+
+
 window.addEventListener('DOMContentLoaded', function() {
 
     // добавить все карточки из массива на страницу
@@ -33,19 +36,16 @@ window.addEventListener('DOMContentLoaded', function() {
         addPlace(item.link, item.name);
     })
 
-
-    const profile = document.querySelector('.profile');
-  
-
     // открытие попапа Редактировать профиль
+    const profile = document.querySelector('.profile');
     const popupEditProfile = document.querySelector('.popup_editprofile');
     const editButton = profile.querySelector('.profile__button_type_edit');
-    editButton.addEventListener('click', function(profileEdit) {
-        popupEditProfile.classList.add('popup_opened');
+    editButton.addEventListener('click', function() {
+        openPopup(popupEditProfile);
     })
 
 
-    // сохранить новый профиль
+    // сохранить профиль
     const popupContainerEditProfile = popupEditProfile.querySelector('.popup__container');
 
     const formProfile = popupContainerEditProfile.querySelector('.form');
@@ -58,7 +58,7 @@ window.addEventListener('DOMContentLoaded', function() {
         const profileDescription = profile.querySelector('.profile__description');
         profileHeader.textContent = formNameProfile.value;
         profileDescription.textContent = formDescriptionProfile.value;
-        popupEditProfile.classList.remove('popup_opened');
+        closePopup(popupEditProfile);
     }
 
     formProfile.addEventListener('submit', profileSave);
@@ -73,12 +73,14 @@ window.addEventListener('DOMContentLoaded', function() {
     const popupAddPlace = document.querySelector('.popup_addplace');
     const addButton = profile.querySelector('.profile__button_type_add');
     addButton.addEventListener('click', function(event) {
-        popupAddPlace.classList.add('popup_opened');
+        openPopup(popupAddPlace);
     })
 
     // закрытие попапа Добавить место
     const closeButtonAddPlace = popupAddPlace.querySelector('.popup__button_type_close');
-    closeButtonAddPlace.addEventListener('click', closeAddPlacePopup);
+    closeButtonAddPlace.addEventListener('click', function() {
+        closePopup(popupAddPlace);
+    })
 
     // добавить карточку места
     const popupContainerAddPlace = popupAddPlace.querySelector('.popup__container');
@@ -89,15 +91,19 @@ window.addEventListener('DOMContentLoaded', function() {
     function addPlaceSubmitHandler(event) {
         event.preventDefault();
         addPlace(formLinkAddPlace.value, formNameAddPlace.value);
-        closeAddPlacePopup();
+        closePopup(popupAddPlace);
     }
     formAddPlace.addEventListener('submit', addPlaceSubmitHandler);
 })
 
-// Закрыть попап добавления места
-function closeAddPlacePopup() {
-    const popupAddPlace = document.querySelector('.popup_addplace');
-    popupAddPlace.classList.remove('popup_opened');
+// Открыть попап
+function openPopup(popup) {
+    popup.classList.add('popup_opened');
+}
+
+// Закрыть попап
+function closePopup(popup) {
+    popup.classList.remove('popup_opened');
 }
 
 // действия с карточками
@@ -130,13 +136,12 @@ function addPlace(link, name) {
         popupPhotoElement.setAttribute('alt', name);
         popupTextElement.textContent = name;
 
-        popupPhotoPlace.classList.add('popup_opened');
+        openPopup(popupPhotoPlace);
 
         const closeButtonPhotoPlace = popupPhotoPlace.querySelector('.popup__button_type_close');
         closeButtonPhotoPlace.addEventListener('click', function() {
-            popupPhotoPlace.classList.remove('popup_opened');
+            closePopup(popupPhotoPlace);
         })
     })
 }
 
-    
