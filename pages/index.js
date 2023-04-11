@@ -31,64 +31,68 @@ const popup = document.querySelector('.popup');
 
 window.addEventListener('DOMContentLoaded', function() {
 
+    // константы для функционирования попапа Редактировать профиль
+    const profile = document.querySelector('.profile');
+    const popupEditProfile = document.querySelector('.popup_editprofile');
+    const editButton = profile.querySelector('.profile__button_type_edit');
+    const popupContainerEditProfile = popupEditProfile.querySelector('.popup__container');
+    const formProfile = popupContainerEditProfile.querySelector('.form');
+    const formNameProfile = formProfile.querySelector('.form__input_type_name');
+    const formDescriptionProfile = formProfile.querySelector('.form__input_type_description');
+    const profileHeader = profile.querySelector('.profile__header');
+    const profileDescription = profile.querySelector('.profile__description');
+    const closeButtonEditProfile = popupEditProfile.querySelector('.popup__button_type_close');
+
+    // константы для функционирования попапа Новое место
+    const popupAddPlace = document.querySelector('.popup_addplace');
+    const addButton = profile.querySelector('.profile__button_type_add');
+    const closeButtonAddPlace = popupAddPlace.querySelector('.popup__button_type_close');
+    const popupContainerAddPlace = popupAddPlace.querySelector('.popup__container');
+    const formAddPlace = popupContainerAddPlace.querySelector('.form')
+    const formNameAddPlace =formAddPlace.querySelector('.form__input_type_name')
+    const formLinkAddPlace = formAddPlace.querySelector('.form__input_type_description');
+
+    // константы для функционирования попапа Фотография места
+    
+
     // добавить все карточки из массива на страницу
     initialCards.forEach(function (item) {
         addPlace(item.link, item.name);
     })
 
     // открытие попапа Редактировать профиль
-    const profile = document.querySelector('.profile');
-    const popupEditProfile = document.querySelector('.popup_editprofile');
-    const editButton = profile.querySelector('.profile__button_type_edit');
     editButton.addEventListener('click', function() {
         openPopup(popupEditProfile);
     })
 
 
     // сохранить профиль
-    const popupContainerEditProfile = popupEditProfile.querySelector('.popup__container');
-
-    const formProfile = popupContainerEditProfile.querySelector('.form');
-    const formNameProfile = formProfile.querySelector('.form__input_type_name');
-    const formDescriptionProfile = formProfile.querySelector('.form__input_type_description');
-
-    function profileSave(event) {
-        event.preventDefault();
-        const profileHeader = profile.querySelector('.profile__header');
-        const profileDescription = profile.querySelector('.profile__description');
+    function handleProfileFormSubmit(event) {
+        event.preventDefault();    
         profileHeader.textContent = formNameProfile.value;
         profileDescription.textContent = formDescriptionProfile.value;
         closePopup(popupEditProfile);
     }
 
-    formProfile.addEventListener('submit', profileSave);
+    formProfile.addEventListener('submit', handleProfileFormSubmit);
 
     // закрытие попапа Редактировать профиль
-    const closeButtonEditProfile = popupEditProfile.querySelector('.popup__button_type_close');
     closeButtonEditProfile.addEventListener('click', function (event) {
         popupEditProfile.classList.remove('popup_opened');
     })
 
     // открытие попапа Добавить место
-    const popupAddPlace = document.querySelector('.popup_addplace');
-    const addButton = profile.querySelector('.profile__button_type_add');
     addButton.addEventListener('click', function(event) {
         openPopup(popupAddPlace);
     })
 
     // закрытие попапа Добавить место
-    const closeButtonAddPlace = popupAddPlace.querySelector('.popup__button_type_close');
     closeButtonAddPlace.addEventListener('click', function() {
         closePopup(popupAddPlace);
     })
 
     // добавить карточку места
-    const popupContainerAddPlace = popupAddPlace.querySelector('.popup__container');
-    const formAddPlace = popupContainerAddPlace.querySelector('.form')
-    const formNameAddPlace =formAddPlace.querySelector('.form__input_type_name')
-    const formLinkAddPlace = formAddPlace.querySelector('.form__input_type_description');
-
-    function addPlaceSubmitHandler(event) {
+        function addPlaceSubmitHandler(event) {
         event.preventDefault();
         addPlace(formLinkAddPlace.value, formNameAddPlace.value);
         closePopup(popupAddPlace);
@@ -110,6 +114,7 @@ function closePopup(popup) {
 function addPlace(link, name) {
     const gridTemplate = document.querySelector('#template-grid').content;
     const gridElement = gridTemplate.querySelector('.elements-grid__item').cloneNode(true);
+    const likeButton = gridElement.querySelector('.elements-grid__button-like');
 
     gridElement.querySelector('.elements-grid__photo').src = link;
     gridElement.querySelector('.elements-grid__photo').setAttribute('alt', name);
@@ -117,7 +122,7 @@ function addPlace(link, name) {
     gridElement.querySelector('.elements-grid__button-delete').addEventListener('click', function() {
         gridElement.remove();
     })
-    const likeButton = gridElement.querySelector('.elements-grid__button-like');
+    
     likeButton.addEventListener('click', function() {
         likeButton.classList.toggle('elements-grid__button-like_checked');
     })
@@ -127,10 +132,9 @@ function addPlace(link, name) {
     const popupPhotoPlace = document.querySelector('.popup_photo-place');
     const gridPhoto = document.querySelector('.elements-grid__photo');
     gridPhoto.addEventListener('click', function() {
-        
-        
         const popupPhotoElement = popupPhotoPlace.querySelector('.popup__photo');
         const popupTextElement = popupPhotoPlace.querySelector('.popup__description');
+        const closeButtonPhotoPlace = popupPhotoPlace.querySelector('.popup__button_type_close');
 
         popupPhotoElement.src = link;
         popupPhotoElement.setAttribute('alt', name);
@@ -138,7 +142,7 @@ function addPlace(link, name) {
 
         openPopup(popupPhotoPlace);
 
-        const closeButtonPhotoPlace = popupPhotoPlace.querySelector('.popup__button_type_close');
+        
         closeButtonPhotoPlace.addEventListener('click', function() {
             closePopup(popupPhotoPlace);
         })
