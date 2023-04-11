@@ -26,7 +26,7 @@ const initialCards = [
     }
 ];
 
-window.onload = function() {
+window.addEventListener('DOMContentLoaded', function() {
 
     // добавить все карточки из массива на страницу
     initialCards.forEach(function (item) {
@@ -92,7 +92,7 @@ window.onload = function() {
         closeAddPlacePopup();
     }
     formAddPlace.addEventListener('submit', addPlaceSubmitHandler);
-}
+})
 
 // Закрыть попап добавления места
 function closeAddPlacePopup() {
