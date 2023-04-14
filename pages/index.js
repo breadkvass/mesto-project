@@ -52,11 +52,13 @@ window.addEventListener('DOMContentLoaded', function() {
     const formNameAddPlace =formAddPlace.querySelector('.form__input_type_name')
     const formLinkAddPlace = formAddPlace.querySelector('.form__input_type_description');
     
+    const gridElements = document.querySelector('.elements-grid');
+    
 
     // добавить все карточки из массива на страницу
     initialCards.forEach(function (item) {
         let card = createCard(item.link, item.name);
-        document.querySelector('.elements-grid').prepend(card);
+        gridElements.prepend(card);
     })
 
     // открытие попапа Редактировать профиль
@@ -93,8 +95,8 @@ window.addEventListener('DOMContentLoaded', function() {
     // добавить карточку места
         function handleAddPlaceSubmit(event) {
         event.preventDefault();
-        createCard(formLinkAddPlace.value, formNameAddPlace.value);
-        document.querySelector('.elements-grid').prepend(card);
+        let card = createCard(formLinkAddPlace.value, formNameAddPlace.value);
+        gridElements.prepend(card);
         closePopup(popupAddPlace);
         formAddPlace.reset();
     }
@@ -129,8 +131,6 @@ function createCard(link, name) {
     likeButton.addEventListener('click', function() {
         likeButton.classList.toggle('elements-grid__button-like_checked');
     })
-
-    // document.querySelector('.elements-grid').prepend(gridElement);
 
     
     gridPhoto.addEventListener('click', function() {
