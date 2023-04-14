@@ -117,9 +117,10 @@ function createCard(link, name) {
     const gridTemplate = document.querySelector('#template-grid').content;
     const gridElement = gridTemplate.querySelector('.elements-grid__item').cloneNode(true);
     const likeButton = gridElement.querySelector('.elements-grid__button-like');
+    const gridPhoto = gridElement.querySelector('.elements-grid__photo');
 
-    gridElement.querySelector('.elements-grid__photo').src = link;
-    gridElement.querySelector('.elements-grid__photo').setAttribute('alt', name);
+    gridPhoto.src = link;
+    gridPhoto.setAttribute('alt', name);
     gridElement.querySelector('.elements-grid__name').textContent = name;
     gridElement.querySelector('.elements-grid__button-delete').addEventListener('click', function() {
         gridElement.remove();
@@ -131,7 +132,7 @@ function createCard(link, name) {
 
     // document.querySelector('.elements-grid').prepend(gridElement);
 
-    const gridPhoto = gridElement.querySelector('.elements-grid__photo');
+    
     gridPhoto.addEventListener('click', function() {
         const popupPhotoPlace = document.querySelector('.popup_photo-place');
         const popupPhotoElement = popupPhotoPlace.querySelector('.popup__photo');
