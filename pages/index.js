@@ -51,13 +51,12 @@ window.addEventListener('DOMContentLoaded', function() {
     const formAddPlace = popupContainerAddPlace.querySelector('.form')
     const formNameAddPlace =formAddPlace.querySelector('.form__input_type_name')
     const formLinkAddPlace = formAddPlace.querySelector('.form__input_type_description');
-
-    // константы для функционирования попапа Фотография места
     
 
     // добавить все карточки из массива на страницу
     initialCards.forEach(function (item) {
-        addPlace(item.link, item.name);
+        let card = createCard(item.link, item.name);
+        document.querySelector('.elements-grid').prepend(card);
     })
 
     // открытие попапа Редактировать профиль
@@ -92,12 +91,14 @@ window.addEventListener('DOMContentLoaded', function() {
     })
 
     // добавить карточку места
-        function addPlaceSubmitHandler(event) {
+        function handleAddPlaceSubmit(event) {
         event.preventDefault();
-        addPlace(formLinkAddPlace.value, formNameAddPlace.value);
+        createCard(formLinkAddPlace.value, formNameAddPlace.value);
+        document.querySelector('.elements-grid').prepend(card);
         closePopup(popupAddPlace);
+        formAddPlace.reset();
     }
-    formAddPlace.addEventListener('submit', addPlaceSubmitHandler);
+    formAddPlace.addEventListener('submit', handleAddPlaceSubmit);
 })
 
 // Открыть попап
@@ -111,7 +112,8 @@ function closePopup(popup) {
 }
 
 // действия с карточками
-function addPlace(link, name) {
+
+function createCard(link, name) {
     const gridTemplate = document.querySelector('#template-grid').content;
     const gridElement = gridTemplate.querySelector('.elements-grid__item').cloneNode(true);
     const likeButton = gridElement.querySelector('.elements-grid__button-like');
@@ -127,11 +129,11 @@ function addPlace(link, name) {
         likeButton.classList.toggle('elements-grid__button-like_checked');
     })
 
-    document.querySelector('.elements-grid').prepend(gridElement);
+    // document.querySelector('.elements-grid').prepend(gridElement);
 
-    const popupPhotoPlace = document.querySelector('.popup_photo-place');
-    const gridPhoto = document.querySelector('.elements-grid__photo');
+    const gridPhoto = gridElement.querySelector('.elements-grid__photo');
     gridPhoto.addEventListener('click', function() {
+        const popupPhotoPlace = document.querySelector('.popup_photo-place');
         const popupPhotoElement = popupPhotoPlace.querySelector('.popup__photo');
         const popupTextElement = popupPhotoPlace.querySelector('.popup__description');
         const closeButtonPhotoPlace = popupPhotoPlace.querySelector('.popup__button_type_close');
@@ -141,11 +143,12 @@ function addPlace(link, name) {
         popupTextElement.textContent = name;
 
         openPopup(popupPhotoPlace);
-
         
         closeButtonPhotoPlace.addEventListener('click', function() {
             closePopup(popupPhotoPlace);
         })
     })
+
+    return gridElement;
 }
 
