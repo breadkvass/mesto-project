@@ -1,32 +1,32 @@
 // Основные grid-карточки
 const initialCards = [
     {
-      name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+        name: 'Архыз',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
     },
     {
-      name: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+        name: 'Челябинская область',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
     },
     {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+        name: 'Иваново',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
     },
     {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+        name: 'Камчатка',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
     },
     {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+        name: 'Холмогорский район',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
     },
     {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+        name: 'Байкал',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
 ];
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
 
     // константы для функционирования попапа Редактировать профиль
     const profile = document.querySelector('.profile');
@@ -46,30 +46,32 @@ window.addEventListener('DOMContentLoaded', function() {
     const closeButtonAddPlace = popupAddPlace.querySelector('.popup__button_type_close');
     const popupContainerAddPlace = popupAddPlace.querySelector('.popup__container');
     const formAddPlace = popupContainerAddPlace.querySelector('.form')
-    const formNameAddPlace =formAddPlace.querySelector('.form__input_type_name')
+    const formNameAddPlace = formAddPlace.querySelector('.form__input_type_name')
     const formLinkAddPlace = formAddPlace.querySelector('.form__input_type_description');
-    
+
     const gridElements = document.querySelector('.elements-grid');
     const popupPhotoPlace = document.querySelector('.popup_photo-place');
     const popupPhotoElement = popupPhotoPlace.querySelector('.popup__photo');
     const popupTextElement = popupPhotoPlace.querySelector('.popup__description');
     const closeButtonPhotoPlace = popupPhotoPlace.querySelector('.popup__button_type_close');
-    
+
 
     // добавить все карточки из массива на страницу
     initialCards.forEach(function (item) {
-        let card = createCard(item.link, item.name);
+        const card = createCard(item.link, item.name);
         gridElements.prepend(card);
     })
 
     // открытие попапа Редактировать профиль
-    editButton.addEventListener('click', function() {
+    editButton.addEventListener('click', function () {
+        formNameProfile.placeholder = profileHeader.innerText;
+        formDescriptionProfile.placeholder = profileDescription.innerText;
         openPopup(popupEditProfile);
     })
 
     // сохранить профиль
     function handleProfileFormSubmit(event) {
-        event.preventDefault();    
+        event.preventDefault();
         profileHeader.textContent = formNameProfile.value;
         profileDescription.textContent = formDescriptionProfile.value;
         closePopup(popupEditProfile);
@@ -79,33 +81,33 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // закрытие попапа Редактировать профиль
     closeButtonEditProfile.addEventListener('click', function (event) {
-        popupEditProfile.classList.remove('popup_opened');
+        closePopup(popupEditProfile);
     })
 
     // открытие попапа Добавить место
-    addButton.addEventListener('click', function(event) {
+    addButton.addEventListener('click', function (event) {
         openPopup(popupAddPlace);
     })
 
     // закрытие попапа Добавить место
-    closeButtonAddPlace.addEventListener('click', function() {
+    closeButtonAddPlace.addEventListener('click', function () {
         closePopup(popupAddPlace);
     })
 
     // добавить карточку места
     function handleAddPlaceSubmit(event) {
-    event.preventDefault();
-    let card = createCard(formLinkAddPlace.value, formNameAddPlace.value);
-    gridElements.prepend(card);
-    closePopup(popupAddPlace);
-    formAddPlace.reset();
+        event.preventDefault();
+        const card = createCard(formLinkAddPlace.value, formNameAddPlace.value);
+        gridElements.prepend(card);
+        closePopup(popupAddPlace);
+        formAddPlace.reset();
     }
 
     formAddPlace.addEventListener('submit', handleAddPlaceSubmit);
 
     // Открыть попап
     function openPopup(popup) {
-    popup.classList.add('popup_opened');
+        popup.classList.add('popup_opened');
     }
 
     // Закрыть попап
@@ -123,15 +125,15 @@ window.addEventListener('DOMContentLoaded', function() {
         gridPhoto.src = link;
         gridPhoto.setAttribute('alt', name);
         gridElement.querySelector('.elements-grid__name').textContent = name;
-        gridElement.querySelector('.elements-grid__button-delete').addEventListener('click', function() {
+        gridElement.querySelector('.elements-grid__button-delete').addEventListener('click', function () {
             gridElement.remove();
         })
-    
-        likeButton.addEventListener('click', function() {
+
+        likeButton.addEventListener('click', function () {
             likeButton.classList.toggle('elements-grid__button-like_checked');
         })
 
-        gridPhoto.addEventListener('click', function() {
+        gridPhoto.addEventListener('click', function () {
             popupPhotoElement.src = link;
             popupPhotoElement.setAttribute('alt', name);
             popupTextElement.textContent = name;
@@ -141,7 +143,7 @@ window.addEventListener('DOMContentLoaded', function() {
         return gridElement;
     }
 
-    closeButtonPhotoPlace.addEventListener('click', function() {
+    closeButtonPhotoPlace.addEventListener('click', function () {
         closePopup(popupPhotoPlace);
     })
 
