@@ -64,8 +64,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // открытие попапа Редактировать профиль
     editButton.addEventListener('click', function () {
-        formNameProfile.placeholder = profileHeader.innerText;
-        formDescriptionProfile.placeholder = profileDescription.innerText;
+        formNameProfile.value = profileHeader.innerText;
+        formDescriptionProfile.value = profileDescription.innerText;
         openPopup(popupEditProfile);
     })
 
