@@ -80,12 +80,12 @@ window.addEventListener('DOMContentLoaded', function () {
     formProfile.addEventListener('submit', handleProfileFormSubmit);
 
     // закрытие попапа Редактировать профиль
-    closeButtonEditProfile.addEventListener('click', function (event) {
+    closeButtonEditProfile.addEventListener('click', function () {
         closePopup(popupEditProfile);
     })
 
     // открытие попапа Добавить место
-    addButton.addEventListener('click', function (event) {
+    addButton.addEventListener('click', function () {
         openPopup(popupAddPlace);
     })
 
@@ -105,14 +105,24 @@ window.addEventListener('DOMContentLoaded', function () {
 
     formAddPlace.addEventListener('submit', handleAddPlaceSubmit);
 
+    // закрытие попапа по нажатию ESC
+    function closePopupEsc(evt) {
+        if (evt.key === 'Escape') {
+            const popup = document.querySelector('.popup_opened');
+            closePopup(popup);
+        }
+    }
+
     // Открыть попап
     function openPopup(popup) {
         popup.classList.add('popup_opened');
+        document.addEventListener('keydown', closePopupEsc);
     }
 
     // Закрыть попап
     function closePopup(popup) {
         popup.classList.remove('popup_opened');
+        document.removeEventListener('keydown', closePopupEsc);
     }
 
     // действия с карточками
