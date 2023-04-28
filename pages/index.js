@@ -113,16 +113,26 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // закрытие попапа кликом на оверлей
+    function closePopupOverlay(evt) {
+        if (evt.target.closest('.popup')) {
+            const popup = document.querySelector('.popup_opened');
+            closePopup(popup);
+        }
+    }
+
     // Открыть попап
     function openPopup(popup) {
         popup.classList.add('popup_opened');
         document.addEventListener('keydown', closePopupEsc);
+        document.addEventListener('click', closePopupOverlay);
     }
 
     // Закрыть попап
     function closePopup(popup) {
         popup.classList.remove('popup_opened');
         document.removeEventListener('keydown', closePopupEsc);
+        document.removeEventListener('click', closePopupOverlay);
     }
 
     // действия с карточками
