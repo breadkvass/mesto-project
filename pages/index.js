@@ -115,8 +115,10 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // закрытие попапа кликом на оверлей
     function closePopupOverlay(evt) {
-        if (evt.target.closest('.popup')) {
-            const popup = document.querySelector('.popup_opened');
+        const popup = document.querySelector('.popup_opened');
+        const popupBorders = popup.querySelector('.popup__borders');
+        const withinPopupBorders = evt.composedPath().includes(popupBorders);
+        if (!withinPopupBorders) {
             closePopup(popup);
         }
     }
@@ -125,7 +127,7 @@ window.addEventListener('DOMContentLoaded', function () {
     function openPopup(popup) {
         popup.classList.add('popup_opened');
         document.addEventListener('keydown', closePopupEsc);
-        document.addEventListener('click', closePopupOverlay);
+        popup.addEventListener('click', closePopupOverlay);
     }
 
     // Закрыть попап
@@ -134,6 +136,8 @@ window.addEventListener('DOMContentLoaded', function () {
         document.removeEventListener('keydown', closePopupEsc);
         document.removeEventListener('click', closePopupOverlay);
     }
+
+    
 
     // действия с карточками
     function createCard(link, name) {
