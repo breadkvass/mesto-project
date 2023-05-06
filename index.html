@@ -51,8 +51,8 @@
 				</button>
 				<h4 class="popup__header">Новое место</h4>
 				<form class="form" name="form_add-place">
-					<input class="form__input form__input_type_name" type="text" placeholder="Горный" name="form_place-name">
-					<input class="form__input form__input_type_description" type="text" placeholder="https://unsplash.com/example.jpg" name="form_place-description">
+					<input class="form__input form__input_type_name" type="text" placeholder="Горный" name="form_place-name" minlength="2" maxlength="30" pattern="^[a-zA-Z]+$" required>
+					<input class="form__input form__input_type_description" type="url" placeholder="https://unsplash.com/example.jpg" name="form_place-description" required>
 					<button class="popup__button popup__button_type_save" type="submit">Создать</button>
 				</form>
 			</div>
@@ -64,8 +64,8 @@
 				</button>
 				<h4 class="popup__header">Редактировать профиль</h4>
 				<form class="form" name="form_edit-profile">
-					<input class="form__input form__input_type_name" type="text" placeholder="Жак-Ив Кусто" name="form_edit-name">
-					<input class="form__input form__input_type_description" type="text" placeholder="Исследователь океана" name="form_edit-description">
+					<input class="form__input form__input_type_name" type="text" placeholder="Жак-Ив Кусто" name="form_edit-name" minlength="2" maxlength="40" required>
+					<input class="form__input form__input_type_description" type="text" placeholder="Исследователь океана" name="form_edit-description" minlength="2" maxlength="200" required>
 					<button class="popup__button popup__button_type_save" type="submit">Сохранить</button>
 				</form>
 			</div>
