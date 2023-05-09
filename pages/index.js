@@ -65,7 +65,9 @@ window.addEventListener('DOMContentLoaded', function () {
     // открытие попапа Редактировать профиль
     editButton.addEventListener('click', function () {
         formNameProfile.value = profileHeader.innerText;
+        hideInputError(formNameProfile);
         formDescriptionProfile.value = profileDescription.innerText;
+        hideInputError(formDescriptionProfile);
         openPopup(popupEditProfile);
     })
 
@@ -86,6 +88,11 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // открытие попапа Добавить место
     addButton.addEventListener('click', function () {
+        formNameAddPlace.value = '';
+        hideInputError(formNameAddPlace);
+        formLinkAddPlace.value = '';
+        hideInputError(formLinkAddPlace);
+        formAddPlace.querySelector('button[type="submit"]').disabled = true;
         openPopup(popupAddPlace);
     })
 
@@ -171,4 +178,53 @@ window.addEventListener('DOMContentLoaded', function () {
         closePopup(popupPhotoPlace);
     })
 
+
+    // Включение валидации для всех форм
+    document.querySelectorAll('.form').forEach(form => {
+        // Включение валидации для всех инпутов формы
+        form.querySelectorAll('.form__input').forEach(input => {
+            input.addEventListener('input', () => {
+                isValid(form, input);
+                isFormValid(form);
+            });
+        })
+    });
+
+    const isValid = (form, input) => {
+        if (!input.validity.valid) {
+            showInputError(input);
+        } else {
+            hideInputError(input);
+        }
+    }; 
+
+    const showInputError = input => {
+        console.log('showError', input.validity, input.validationMessage);
+
+        const errorMessage = input.closest('.form__field').querySelector('.form__input-error');
+        input.classList.add('form__input_type_error');
+        if (input.validity.patternMismatch) {
+            errorMessage.textContent = 'Поле может содержать латинские буквы, кириллические буквы, знаки дефиса и пробелы.'; 
+        } else {
+            errorMessage.textContent = input.validationMessage;
+        }
+        errorMessage.classList.add('form__input-error_active');
+    };
+      
+    const hideInputError = input => {
+        console.log('hideError', input.validity, input.validationMessage);
+
+        const errorMessage = input.closest('.form__field').querySelector('.form__input-error');
+        input.classList.remove('form__input_type_error');
+        errorMessage.classList.remove('form__input-error_active');
+        errorMessage.textContent = '';
+    }; 
+
+    const isFormValid = form => {
+        const inputs =  Array.from(form.querySelectorAll('.form__input'));
+        const hasInvalidInput = inputs.some(input => {
+            return !input.validity.valid;
+        })
+        form.querySelector('button[type="submit"]').disabled = hasInvalidInput;
+    }
 })

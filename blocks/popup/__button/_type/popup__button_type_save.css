@@ -21,3 +21,11 @@
         padding-bottom: 14px;
     }
 }
+
+.popup__button_type_save:disabled,
+button[disabled]{
+  border: 1px solid #000;
+  background-color: transparent;
+  color: #000;
+  opacity: 0.2;
+}

@@ -17,13 +17,13 @@
     margin-top: 29px;
 }
 
+.form__input:focus-visible {
+    outline: none;
+}
+
 @media screen and (max-width: 767px) {
     .form__input {
         width: 238px;
     }
 }
 
-.form__input:invalid {
-    border-bottom: 1px solid rgba(255, 0, 0, 1);
-
-}
