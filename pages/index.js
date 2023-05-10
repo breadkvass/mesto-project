@@ -112,24 +112,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
     formAddPlace.addEventListener('submit', handleAddPlaceSubmit);
 
-    // закрытие попапа по нажатию ESC
-    function closePopupEsc(evt) {
-        if (evt.key === 'Escape') {
-            const popup = document.querySelector('.popup_opened');
-            closePopup(popup);
-        }
-    }
-
-    // закрытие попапа кликом на оверлей
-    function closePopupOverlay(evt) {
-        const popup = document.querySelector('.popup_opened');
-        const popupBorders = popup.querySelector('.popup__borders');
-        const withinPopupBorders = evt.composedPath().includes(popupBorders);
-        if (!withinPopupBorders) {
-            closePopup(popup);
-        }
-    }
-
     // Открыть попап
     function openPopup(popup) {
         popup.classList.add('popup_opened');
@@ -144,7 +126,24 @@ window.addEventListener('DOMContentLoaded', function () {
         document.removeEventListener('click', closePopupOverlay);
     }
 
-    
+     // закрытие попапа по нажатию ESC
+     function closePopupEsc(evt) {
+        if (evt.key === 'Escape') {
+            const popup = document.querySelector('.popup_opened');
+            closePopup(popup);
+        }
+    }
+
+    // закрытие попапа кликом на оверлей
+    function closePopupOverlay(evt) {
+     
+        const popup = document.querySelector('.popup_opened');
+        const popupBorders = popup.querySelector('.popup__borders');
+        const withinPopupBorders = evt.composedPath().includes(popupBorders);
+        if (!withinPopupBorders) {
+            closePopup(popup);
+        }
+    }
 
     // действия с карточками
     function createCard(link, name) {
