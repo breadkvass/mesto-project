@@ -115,33 +115,34 @@ window.addEventListener('DOMContentLoaded', function () {
     // Открыть попап
     function openPopup(popup) {
         popup.classList.add('popup_opened');
-        document.addEventListener('keydown', closePopupEsc);
-        popup.addEventListener('click', closePopupOverlay);
     }
 
     // Закрыть попап
     function closePopup(popup) {
         popup.classList.remove('popup_opened');
-        document.removeEventListener('keydown', closePopupEsc);
-        document.removeEventListener('click', closePopupOverlay);
     }
 
-     // закрытие попапа по нажатию ESC
-     function closePopupEsc(evt) {
+    // Слушатели на закрытие попапов через оверлей и esc
+    document.querySelectorAll('.popup').forEach(popup => {
+        popup.addEventListener('click', closePopupOverlay);
+    });
+    
+    document.addEventListener('keydown', evt => {
         if (evt.key === 'Escape') {
-            const popup = document.querySelector('.popup_opened');
-            closePopup(popup);
+            document.querySelectorAll('.popup_opened').forEach(popup => {
+                closePopup(popup);
+            })
         }
-    }
+    });
 
-    // закрытие попапа кликом на оверлей
     function closePopupOverlay(evt) {
-     
         const popup = document.querySelector('.popup_opened');
-        const popupBorders = popup.querySelector('.popup__borders');
-        const withinPopupBorders = evt.composedPath().includes(popupBorders);
-        if (!withinPopupBorders) {
-            closePopup(popup);
+        if (popup) {
+            const popupBorders = popup.querySelector('.popup__borders');
+            const withinPopupBorders = evt.composedPath().includes(popupBorders);
+            if (!withinPopupBorders) {
+                closePopup(popup);
+            }
         }
     }
 
@@ -180,8 +181,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Включение валидации для всех форм
     document.querySelectorAll('.form').forEach(form => {
+        const inputSelector = '.form__input';
         // Включение валидации для всех инпутов формы
-        form.querySelectorAll('.form__input').forEach(input => {
+        form.querySelectorAll(inputSelector).forEach(input => {
             input.addEventListener('input', () => {
                 isValid(form, input);
                 isFormValid(form);
@@ -203,7 +205,7 @@ window.addEventListener('DOMContentLoaded', function () {
         const errorMessage = input.closest('.form__field').querySelector('.form__input-error');
         input.classList.add('form__input_type_error');
         if (input.validity.patternMismatch) {
-            errorMessage.textContent = 'Поле может содержать латинские буквы, кириллические буквы, знаки дефиса и пробелы.'; 
+            errorMessage.textContent = 'Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы'; 
         } else {
             errorMessage.textContent = input.validationMessage;
         }
