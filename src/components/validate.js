@@ -7,9 +7,9 @@ export function enableValidation(conf) {
                 isValid(conf, input);
                 isFormValid(conf, form);
             });
-        })
+        });
     });
-}
+};
 
 const isValid = (conf, input) => {
     if (!input.validity.valid) {
@@ -20,31 +20,27 @@ const isValid = (conf, input) => {
 }; 
 
 const showInputError = (conf, input) => {
-    // console.log('showError', input.validity, input.validationMessage);
-
-    const errorMessage = input.closest('.form__field').querySelector('.form__input-error');
-    input.classList.add('form__input_type_error');
+    const errorMessage = input.closest(conf.formFieldSelector).querySelector(conf.inputErrorSelector);
+    input.classList.add(conf.inputErrorClass);
     if (input.validity.patternMismatch) {
         errorMessage.textContent = 'Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы'; 
     } else {
         errorMessage.textContent = input.validationMessage;
-    }
-    errorMessage.classList.add('form__input-error_active');
+    };
+    errorMessage.classList.add(conf.inputErrorActiveClass);
 };
   
 export const hideInputError = (conf, input) => {
-    // console.log('hideError', input.validity, input.validationMessage);
-
-    const errorMessage = input.closest('.form__field').querySelector('.form__input-error');
-    input.classList.remove('form__input_type_error');
-    errorMessage.classList.remove('form__input-error_active');
+    const errorMessage = input.closest(conf.formFieldSelector).querySelector(conf.inputErrorSelector);
+    input.classList.remove(conf.inputErrorClass);
+    errorMessage.classList.remove(conf.inputErrorActiveClass);
     errorMessage.textContent = '';
 }; 
 
 const isFormValid = (conf, form) => {
-    const inputs =  Array.from(form.querySelectorAll('.form__input'));
+    const inputs =  Array.from(form.querySelectorAll(conf.inputSelector));
     const hasInvalidInput = inputs.some(input => {
         return !input.validity.valid;
-    })
-    form.querySelector('button[type="submit"]').disabled = hasInvalidInput;
-}
+    });
+    form.querySelector(conf.sumbmitButtonClass).disabled = hasInvalidInput;
+};

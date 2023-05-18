@@ -65,7 +65,12 @@ window.addEventListener('DOMContentLoaded', function () {
 
     const validationConfiguration = {
         formSelector: '.form',
-        inputSelector: '.form__input'
+        inputSelector: '.form__input',
+        formFieldSelector: '.form__field',
+        inputErrorSelector: '.form__input-error',
+        inputErrorActiveClass: 'form__input-error_active',
+        inputErrorClass: 'form__input_type_error',
+        sumbmitButtonClass: 'button[type="submit"]'
     }
     enableValidation(validationConfiguration);
 
