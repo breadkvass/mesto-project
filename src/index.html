@@ -3,32 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="src/index.css">
-  <script type="module" src="src/components/card.js"></script>
-  <script type="module" src="src/components/modal.js"></script>
-  <script type="module" src="src/components/validate.js"></script>
-  <script type="module" src="src/components/utils.js"></script>
-  <script type="module" src="src/index.js"></script>
+ 
+  <script type="module" src="./components/card.js"></script>
+  <script type="module" src="./components/modal.js"></script>
+  <script type="module" src="./components/utils.js"></script>
+  <script type="module" src="./components/validate.js"></script>
+  <script type="module" src="./components/index.js"></script>
   <title>Место</title>
 </head>
 <body class="page">
 	<header class="header">
-		<img class="header__logo" src="images/logo-white.svg" alt="Логотип Место">
+		<img class="header__logo" src="<%=require('../src/images/logo-white.svg')%>" alt="Логотип Место">
 	</header>
 	<main>
 		<section class="profile" aria-label="Ваш профиль">
 			<div class="profile__container">
-				<img class="profile__avatar" src="images/Profile.png" alt="Ваш аватар">
+				<img class="profile__avatar" src="<%=require('../src/images/Profile.png')%>" alt="Ваш аватар">
 				<div class="profile__info">
 					<h1 class="profile__header">Жак-Ив Кусто</h1>
 					<button class="profile__button profile__button_type_edit" type="button">
-						<img class="profile__pen-image" src="images/pen.svg" alt="Изменить имя">
+						<img class="profile__pen-image" src="<%=require('../src/images/pen.svg')%>" alt="Изменить имя">
 					</button>
 					<p class="profile__description">Исследователь океана</p>
 				</div>
 			</div>
 			<button class="profile__button profile__button_type_add" type="button">
-				<img class="profile__plus-image" src="images/plus-sign.svg" alt="Добавить">
+				<img class="profile__plus-image" src="<%=require('../src/images/plus-sign.svg')%>" alt="Добавить">
 			</button>
 		</section>
 		<section class="elements-grid" aria-label="Места">
@@ -36,12 +36,15 @@
 			<template id="template-grid">
 				<div class="elements-grid__item">
 					<button class="elements-grid__button-delete" type="button">
-						<img class="elements-grid__delete-image" src="images/delete-button.svg" alt="Удалить">
+						<img class="elements-grid__delete-image" src="<%=require('../src/images/delete-button.svg')%>" alt="Удалить">
 					</button>
 					<img class="elements-grid__photo" alt="Фотография места">
 					<div class="elements-grid__caption">
 						<h4 class="elements-grid__name"></h4>
-						<button class="elements-grid__button-like" type="button"></button>
+						<div class="elements-grid__like">
+							<button class="elements-grid__button-like" type="button"></button>
+							<p class="elements-grid__like-counter">0</p>
+						</div>
 					</div>
 				</div>
 			</template>
@@ -51,7 +54,7 @@
 		<section class="popup popup_addplace">
 			<div class="popup__container popup__borders">
 				<button class="popup__button popup__button_type_close" type="button">
-					<img class="popup__close-image" src="images/close-icon.svg" alt="Закрыть">
+					<img class="popup__close-image" src="<%=require('../src/images/close-icon.svg')%>" alt="Закрыть">
 				</button>
 				<h4 class="popup__header">Новое место</h4>
 
@@ -73,7 +76,7 @@
 		<section class="popup popup_editprofile">
 			<div class="popup__container popup__borders">
 				<button class="popup__button popup__button_type_close" type="button">
-					<img class="popup__close-image" src="images/close-icon.svg" alt="Закрыть">
+					<img class="popup__close-image" src="<%=require('../src/images/close-icon.svg')%>" alt="Закрыть">
 				</button>
 				<h4 class="popup__header">Редактировать профиль</h4>
 
@@ -95,12 +98,23 @@
 		<section class="popup popup_photo-place">
 			<div class="popup__photo-container popup__borders">
 				<button class="popup__button popup__button_type_close" type="button">
-					<img class="popup__close-image" src="images/close-icon.svg" alt="Закрыть">
+					<img class="popup__close-image" src="<%=require('../src/images/close-icon.svg')%>" alt="Закрыть">
 				</button>
 				<img class="popup__photo">
 				<p class="popup__description"></p>
 			</div>
 		</section>
+
+		<section class="popup popup_delete-question">
+			<div class="popup__container popup__borders">
+				<button class="popup__button popup__button_type_close" type="button">
+					<img class="popup__close-image" src="<%=require('../src/images/close-icon.svg')%>" alt="Закрыть">
+				</button>
+				<h4 class="popup__header">Вы уверены?</h4>	
+				<button class="popup__button popup__button_type_save" type="submit">Да</button>
+			</div>
+		</section>
+
 	</main>
 	<footer class="footer">
 		<p class="footer__copyright">© 2023 Mesto Russia</p>

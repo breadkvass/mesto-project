@@ -1,8 +1,10 @@
-import {insertCard} from './components/card.js';
+import '../index.css';
 
-import {initPopups, openPopup, closePopup} from './components/modal.js';
+import {insertCard} from './card.js';
 
-import {enableValidation, hideInputError} from './components/validate.js'
+import {initPopups, openPopup, closePopup} from './modal.js';
+
+import {enableValidation, hideInputError} from './validate.js'
 
 // Основные grid-карточки
 const initialCards = [
