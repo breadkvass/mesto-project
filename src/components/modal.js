@@ -1,9 +1,11 @@
 export function openPopup(popup) {
     popup.classList.add('popup_opened');
+    document.addEventListener('keydown', escapeListener);
 }
 
 export function closePopup(popup) {
     popup.classList.remove('popup_opened');
+    document.removeEventListener('keydown', escapeListener);
 }
 
 export function initPopups() {
@@ -17,14 +19,14 @@ export function initPopups() {
         })
 
     });
-    
-    document.addEventListener('keydown', evt => {
-        if (evt.key === 'Escape') {
-            document.querySelectorAll('.popup_opened').forEach(popup => {
-                closePopup(popup);
-            })
-        }
-    });
+}
+
+const escapeListener = function(evt) {
+    if (evt.key === 'Escape') {
+        document.querySelectorAll('.popup_opened').forEach(popup => {
+            closePopup(popup);
+        })
+    }
 }
 
 function closePopupOverlay(evt) {
