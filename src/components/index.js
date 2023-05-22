@@ -63,6 +63,8 @@ window.addEventListener('DOMContentLoaded', function () {
     const popupPhotoElement = popupPhotoPlace.querySelector('.popup__photo');
     const popupTextElement = popupPhotoPlace.querySelector('.popup__description');
 
+   
+
     initPopups();
 
     const validationConfiguration = {
