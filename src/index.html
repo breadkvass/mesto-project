@@ -115,6 +115,25 @@
 			</div>
 		</section>
 
+		<section class="popup popup_update-avatar popup_opened">
+			<div class="popup__container popup__borders">
+				<button class="popup__button popup__button_type_close" type="button">
+					<img class="popup__close-image" src="<%=require('../src/images/close-icon.svg')%>" alt="Закрыть">
+				</button>
+				<h4 class="popup__header">Обновить аватар</h4>
+
+				<form class="form" name="form_add-place" novalidate>
+					<label class="form__field">
+						<input class="form__input form__input_type_description" type="url" placeholder="https://somewebsite.com/someimage.jpg" name="form_place-description" required>
+						<span class="email-input-error form__input-error"></span>
+					</label>
+					<button class="popup__button popup__button_type_save" type="submit">Сохранить</button>
+				</form>
+
+			</div>
+		</section>
+
+
 	</main>
 	<footer class="footer">
 		<p class="footer__copyright">© 2023 Mesto Russia</p>
