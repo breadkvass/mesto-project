@@ -15,6 +15,74 @@ export function getCards() {
     });
 }
 
+export function createCard(link, name) {
+    return fetch(`${apiUrl}/cards`, {
+        method: 'POST',
+        headers: {
+            authorization: token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            link: link,
+            name: name
+        })
+    })
+    .then(res => {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    });
+}
+
+export function deleteCard (cardId) {
+    return fetch(`${apiUrl}/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: token,
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(res => {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    });
+}
+
+export function createCardLike(cardId) {
+    return fetch(`${apiUrl}/cards/likes/${cardId}`, {
+        method: 'PUT',
+        headers: {
+            authorization: token,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    });
+}
+
+export function deleteCardLike(cardId) {
+    return fetch(`${apiUrl}/cards/likes/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: token,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    });
+}
+
 export function getUserInfo() {
     return fetch(`${apiUrl}/users/me`, {
         headers: {
@@ -49,52 +117,16 @@ export function updateUserInfo(name, about) {
     });
 }
 
-export function createCard(link, name) {
-    return fetch(`${apiUrl}/cards`, {
-        method: 'POST',
+export function updateUserAvatar(link) {
+    return fetch(`${apiUrl}/users/me/avatar`, {
+        method: 'PATCH',
         headers: {
             authorization: token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            link: link,
-            name: name
+            avatar: link
         })
-    })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-
-// PUT https://nomoreparties.co/v1/plus-cohort-24/cards/likes/5d1f0611d321eb4bdcd707dd
-
-export function createCardLike(cardId) {
-    return fetch(`${apiUrl}/cards/likes/${cardId}`, {
-        method: 'PUT',
-        headers: {
-            authorization: token,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-export function deleteCardLike(cardId) {
-    return fetch(`${apiUrl}/cards/likes/${cardId}`, {
-        method: 'DELETE',
-        headers: {
-            authorization: token,
-            'Content-Type': 'application/json'
-        }
     })
     .then(res => {
         if (res.ok) {

@@ -28,13 +28,9 @@ function createCard(item, userId, clickHandler, deleteHandler, likeHandler) {
         });
     })
 
-
     deleteButton.addEventListener('click', function () {
-        console.log(deleteHandler);
-        deleteHandler(() => gridElement.remove());
+        deleteHandler(item._id, () => gridElement.remove());
     })
-    
-
         
     gridPhoto.addEventListener('click', function () {
         clickHandler(item.link, item.name);

@@ -6,7 +6,7 @@ import {initPopups, openPopup, closePopup} from './modal.js';
 
 import {enableValidation, hideInputError} from './validate.js'
 
-import { getCards, getUserInfo, updateUserInfo, createCard, createCardLike, deleteCardLike } from './api';
+import { getCards, getUserInfo, updateUserInfo, createCard, createCardLike, deleteCardLike, deleteCard, updateUserAvatar } from './api';
 
 let userId = null;
 
@@ -18,6 +18,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const profileDescription = profile.querySelector('.profile__description');
     const editButton = profile.querySelector('.profile__button_type_edit');
     const profileAvatar = profile.querySelector('.profile__avatar');
+    const profileAvatarContainer = profile.querySelector('.profile__avatar-container');
 
     // константы для функционирования попапа Редактировать профиль
     const popupEditProfile = document.querySelector('.popup_editprofile');
@@ -25,6 +26,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const formProfile = popupContainerEditProfile.querySelector('.form');
     const formNameProfile = formProfile.querySelector('.form__input_type_name');
     const formDescriptionProfile = formProfile.querySelector('.form__input_type_description');
+    const submitButtonProfile = formProfile.querySelector('.popup__button_type_save');
 
     // константы для функционирования попапа Новое место
     const popupAddPlace = document.querySelector('.popup_addplace');
@@ -33,12 +35,19 @@ window.addEventListener('DOMContentLoaded', function () {
     const formAddPlace = popupContainerAddPlace.querySelector('.form')
     const formNameAddPlace = formAddPlace.querySelector('.form__input_type_name')
     const formLinkAddPlace = formAddPlace.querySelector('.form__input_type_description');
+    const submitButtonAddPlace = formAddPlace.querySelector('.popup__button_type_save');
 
     // константы для функционирования попапа Фото
     const gridElements = document.querySelector('.elements-grid');
     const popupPhotoPlace = document.querySelector('.popup_photo-place');
     const popupPhotoElement = popupPhotoPlace.querySelector('.popup__photo');
     const popupTextElement = popupPhotoPlace.querySelector('.popup__description');
+
+    // константы для функционирования попапа Обновить аватар
+    const popupUpdateAvatar = document.querySelector('.popup_update-avatar');
+    const formUpdateAvatar = popupUpdateAvatar.querySelector('.form');
+    const formAvatarLink = formUpdateAvatar.querySelector('.form__input_type_description');
+    const submitButtonUpdateAvatar = formUpdateAvatar.querySelector('.popup__button_type_save');
 
     initPopups();
 
@@ -65,14 +74,48 @@ window.addEventListener('DOMContentLoaded', function () {
     // сохранить профиль
     formProfile.addEventListener('submit', (event) => {
         event.preventDefault();
-        profileHeader.textContent = formNameProfile.value;
-        profileDescription.textContent = formDescriptionProfile.value;
-        closePopup(popupEditProfile);
+        submitButtonProfile.textContent = 'Сохранение...';
         // отправка данных на сервер
-        updateUserInfo(formNameProfile.value, formDescriptionProfile.value).then(data => {
-            console.log('отправка данных на сервер', data);
+        updateUserInfo(formNameProfile.value, formDescriptionProfile.value)
+        .then(data => {
+            profileHeader.textContent = data.name;
+            profileDescription.textContent = data.about;
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .finally(() => {
+            closePopup(popupEditProfile);
+            submitButtonProfile.textContent = 'Создать';
         });
     });
+
+    // открытие попапа Обновить аватар
+    profileAvatarContainer.addEventListener('click', evt => {
+        formAvatarLink.value = '';
+        hideInputError(validationConfiguration, formAvatarLink);
+        openPopup(popupUpdateAvatar);
+    })
+
+    // обновить аватар
+    formUpdateAvatar.addEventListener('submit', (event) => {
+        event.preventDefault();
+        submitButtonUpdateAvatar.textContent = 'Сохранение...';
+        // отправка данных на сервер
+        updateUserAvatar(formAvatarLink.value)
+        .then(data => {
+            profileAvatar.src = formAvatarLink.value;
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .finally(() => {
+            closePopup(popupUpdateAvatar);
+            formUpdateAvatar.reset();
+            submitButtonUpdateAvatar.textContent = 'Сохранить';
+        });
+        
+    });  
 
     // открытие попапа Добавить место
     addButton.addEventListener('click', () => {
@@ -86,15 +129,19 @@ window.addEventListener('DOMContentLoaded', function () {
 
     formAddPlace.addEventListener('submit', (event) => {
         event.preventDefault();
-        closePopup(popupAddPlace);
+        submitButtonAddPlace.textContent = 'Создание...';
         createCard(formLinkAddPlace.value, formNameAddPlace.value)
-            .then(data => {
-                insertCard(gridElements, data, true, cardClickListener, deleteHandler, likeHandler);
-            })
-            .catch((err) => {
-                console.log(err);
-            }); 
-        formAddPlace.reset();
+        .then(data => {
+            insertCard(gridElements, data, userId, cardClickListener, deleteHandler, likeHandler);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .finally(() => {
+            closePopup(popupAddPlace);
+            formAddPlace.reset();
+            submitButtonAddPlace.textContent = 'Создать';
+        }); 
     });
     
     // Функция открытия попапа Фото
@@ -106,19 +153,24 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     const popupDeleteQuestion = document.querySelector('.popup_delete-question');
-    const saveButtonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
+    const buttonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
 
-    const deleteHandler = (deleteCallback) => {
+    const deleteHandler = (cardId, deleteCallback) => {
         popupDeleteQuestion.classList.add('popup_opened');
-        saveButtonPopupDeleteQuestion.addEventListener('click', evt => {
-            popupDeleteQuestion.classList.remove('popup_opened');
-            deleteCallback();
+        buttonPopupDeleteQuestion.addEventListener('click', evt => {
+            deleteCard(cardId)
+            .then(data => {
+                popupDeleteQuestion.classList.remove('popup_opened');
+                deleteCallback();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         })
     }
 
     const likeHandler = (cardId, liked, likeCallback) => {
         if (liked) {
-            console.log('unlike');
             deleteCardLike(cardId)
             .then(data => {
                 likeCallback(data.likes);
@@ -127,7 +179,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 console.log(err);
             });
         } else {
-            console.log('like');
             createCardLike(cardId)
             .then(data => {
                 likeCallback(data.likes);
@@ -139,7 +190,6 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     
     getUserInfo().then(data => {
-        console.log('user info', data);
         profileHeader.textContent = data.name;
         profileDescription.textContent = data.about;
         profileAvatar.removeAttribute('src');
@@ -148,10 +198,8 @@ window.addEventListener('DOMContentLoaded', function () {
     })
 
     getCards().then(data => {
-        console.log('request cards', data);
-        console.log('deleteHandler', deleteHandler);
         data.forEach(item => {
-            insertCard(gridElements, item, userId, cardClickListener, deleteHandler, likeHandler)
+            insertCard(gridElements, item, userId, cardClickListener, deleteHandler, likeHandler);
         });
     });
 
