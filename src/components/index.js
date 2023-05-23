@@ -6,33 +6,9 @@ import {initPopups, openPopup, closePopup} from './modal.js';
 
 import {enableValidation, hideInputError} from './validate.js'
 
-// Основные grid-карточки
-const initialCards = [
-    {
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-];
+import { getCards, getUserInfo, updateUserInfo, sendNewCard } from './api';
+
+let userId = null;
 
 window.addEventListener('DOMContentLoaded', function () {
 
@@ -41,6 +17,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const profileHeader = profile.querySelector('.profile__header');
     const profileDescription = profile.querySelector('.profile__description');
     const editButton = profile.querySelector('.profile__button_type_edit');
+    const profileAvatar = profile.querySelector('.profile__avatar');
 
     // константы для функционирования попапа Редактировать профиль
     const popupEditProfile = document.querySelector('.popup_editprofile');
@@ -62,8 +39,6 @@ window.addEventListener('DOMContentLoaded', function () {
     const popupPhotoPlace = document.querySelector('.popup_photo-place');
     const popupPhotoElement = popupPhotoPlace.querySelector('.popup__photo');
     const popupTextElement = popupPhotoPlace.querySelector('.popup__description');
-
-   
 
     initPopups();
 
@@ -93,8 +68,11 @@ window.addEventListener('DOMContentLoaded', function () {
         profileHeader.textContent = formNameProfile.value;
         profileDescription.textContent = formDescriptionProfile.value;
         closePopup(popupEditProfile);
+        // отправка данных на сервер
+        updateUserInfo(formNameProfile.value, formDescriptionProfile.value).then(data => {
+            console.log('отправка данных на сервер', data);
+        });
     });
-
 
     // открытие попапа Добавить место
     addButton.addEventListener('click', () => {
@@ -110,6 +88,9 @@ window.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         insertCard(gridElements, formLinkAddPlace.value, formNameAddPlace.value, cardClickListener)
         closePopup(popupAddPlace);
+        sendNewCard(formLinkAddPlace.value, formNameAddPlace.value).then(data => {
+            console.log('отправка карточки на сервер', data);
+        });
         formAddPlace.reset();
     });
     
@@ -121,8 +102,20 @@ window.addEventListener('DOMContentLoaded', function () {
         openPopup(popupPhotoPlace);
     }
     
-    // Добавление предсозданных карточек
-    initialCards.forEach((item) => {
-        insertCard(gridElements, item.link, item.name, cardClickListener)
+    getUserInfo().then(data => {
+        console.log('user info', data);
+        profileHeader.textContent = data.name;
+        profileDescription.textContent = data.about;
+        profileAvatar.removeAttribute('src');
+        profileAvatar.setAttribute('src', data.avatar);
+        userId = data._id;
+    })
+
+    getCards().then(data => {
+        console.log('request cards', data);
+        data.forEach(item => {
+            const isDeleteable = userId == item.owner._id; 
+            insertCard(gridElements, item.link, item.name, isDeleteable, cardClickListener)
+        });
     });
 })
