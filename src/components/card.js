@@ -1,12 +1,11 @@
 // действия с карточками
-function createCard(link, name, isDeleteable, clickHandler) {
+function createCard(link, name, isDeleteable, clickHandler, deleteHandler) {
     const gridTemplate = document.querySelector('#template-grid').content;
     const gridElement = gridTemplate.querySelector('.elements-grid__item').cloneNode(true);
     const likeButton = gridElement.querySelector('.elements-grid__button-like');
     const gridPhoto = gridElement.querySelector('.elements-grid__photo');
     const deleteButton = gridElement.querySelector('.elements-grid__button-delete');
-    const popupDeleteQuestion = document.querySelector('.popup_delete-question');
-    const saveButtonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
+    
 
     if (isDeleteable) {
         deleteButton.style.visibility = "visible";
@@ -21,11 +20,8 @@ function createCard(link, name, isDeleteable, clickHandler) {
     gridElement.querySelector('.elements-grid__name').textContent = name;
     
     deleteButton.addEventListener('click', function () {
-        popupDeleteQuestion.classList.add('popup_opened');
-        saveButtonPopupDeleteQuestion.addEventListener('click', evt => {
-            gridElement.remove();
-            popupDeleteQuestion.classList.remove('popup_opened');
-        })
+        console.log(deleteHandler);
+        deleteHandler(() => gridElement.remove());
     })
     
 
@@ -41,8 +37,8 @@ function createCard(link, name, isDeleteable, clickHandler) {
 }
 
 // добавить карточку места
-export function insertCard(parent, link, name, isDeleteable, clickHandler) {
-    const card = createCard(link, name, isDeleteable, clickHandler);
+export function insertCard(parent, link, name, isDeleteable, clickHandler, deleteHandler) {
+    const card = createCard(link, name, isDeleteable, clickHandler, deleteHandler);
     parent.prepend(card);
 }
 

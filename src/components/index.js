@@ -86,7 +86,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     formAddPlace.addEventListener('submit', (event) => {
         event.preventDefault();
-        insertCard(gridElements, formLinkAddPlace.value, formNameAddPlace.value, cardClickListener)
+        insertCard(gridElements, formLinkAddPlace.value, formNameAddPlace.value, true, cardClickListener, deleteHandler)
         closePopup(popupAddPlace);
         sendNewCard(formLinkAddPlace.value, formNameAddPlace.value).then(data => {
             console.log('отправка карточки на сервер', data);
@@ -101,6 +101,17 @@ window.addEventListener('DOMContentLoaded', function () {
         popupTextElement.textContent = name;
         openPopup(popupPhotoPlace);
     }
+
+    const popupDeleteQuestion = document.querySelector('.popup_delete-question');
+    const saveButtonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
+
+    const deleteHandler = (deleteAction) => {
+        popupDeleteQuestion.classList.add('popup_opened');
+        saveButtonPopupDeleteQuestion.addEventListener('click', evt => {
+            popupDeleteQuestion.classList.remove('popup_opened');
+            deleteAction();
+        })
+    }
     
     getUserInfo().then(data => {
         console.log('user info', data);
@@ -113,9 +124,10 @@ window.addEventListener('DOMContentLoaded', function () {
 
     getCards().then(data => {
         console.log('request cards', data);
+        console.log('deleteHandler', deleteHandler);
         data.forEach(item => {
             const isDeleteable = userId == item.owner._id; 
-            insertCard(gridElements, item.link, item.name, isDeleteable, cardClickListener)
+            insertCard(gridElements, item.link, item.name, isDeleteable, cardClickListener, deleteHandler)
         });
     });
 })
