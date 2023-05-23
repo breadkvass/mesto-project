@@ -1,0 +1,9 @@
+.profile__avatar-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.profile__avatar-container:hover .profile__avatar_hover {
+    visibility: visible;
+}

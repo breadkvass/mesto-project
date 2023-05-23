@@ -6,7 +6,7 @@ import {initPopups, openPopup, closePopup} from './modal.js';
 
 import {enableValidation, hideInputError} from './validate.js'
 
-import { getCards, getUserInfo, updateUserInfo, sendNewCard } from './api';
+import { getCards, getUserInfo, updateUserInfo, createCard, createCardLike, deleteCardLike } from './api';
 
 let userId = null;
 
@@ -86,11 +86,14 @@ window.addEventListener('DOMContentLoaded', function () {
 
     formAddPlace.addEventListener('submit', (event) => {
         event.preventDefault();
-        insertCard(gridElements, formLinkAddPlace.value, formNameAddPlace.value, true, cardClickListener, deleteHandler)
         closePopup(popupAddPlace);
-        sendNewCard(formLinkAddPlace.value, formNameAddPlace.value).then(data => {
-            console.log('отправка карточки на сервер', data);
-        });
+        createCard(formLinkAddPlace.value, formNameAddPlace.value)
+            .then(data => {
+                insertCard(gridElements, data, true, cardClickListener, deleteHandler, likeHandler);
+            })
+            .catch((err) => {
+                console.log(err);
+            }); 
         formAddPlace.reset();
     });
     
@@ -105,12 +108,34 @@ window.addEventListener('DOMContentLoaded', function () {
     const popupDeleteQuestion = document.querySelector('.popup_delete-question');
     const saveButtonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
 
-    const deleteHandler = (deleteAction) => {
+    const deleteHandler = (deleteCallback) => {
         popupDeleteQuestion.classList.add('popup_opened');
         saveButtonPopupDeleteQuestion.addEventListener('click', evt => {
             popupDeleteQuestion.classList.remove('popup_opened');
-            deleteAction();
+            deleteCallback();
         })
+    }
+
+    const likeHandler = (cardId, liked, likeCallback) => {
+        if (liked) {
+            console.log('unlike');
+            deleteCardLike(cardId)
+            .then(data => {
+                likeCallback(data.likes);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        } else {
+            console.log('like');
+            createCardLike(cardId)
+            .then(data => {
+                likeCallback(data.likes);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
     }
     
     getUserInfo().then(data => {
@@ -126,8 +151,11 @@ window.addEventListener('DOMContentLoaded', function () {
         console.log('request cards', data);
         console.log('deleteHandler', deleteHandler);
         data.forEach(item => {
-            const isDeleteable = userId == item.owner._id; 
-            insertCard(gridElements, item.link, item.name, isDeleteable, cardClickListener, deleteHandler)
+            insertCard(gridElements, item, userId, cardClickListener, deleteHandler, likeHandler)
         });
     });
+
+
+
+    
 })

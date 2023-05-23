@@ -49,7 +49,7 @@ export function updateUserInfo(name, about) {
     });
 }
 
-export function sendNewCard(link, name) {
+export function createCard(link, name) {
     return fetch(`${apiUrl}/cards`, {
         method: 'POST',
         headers: {
@@ -57,9 +57,44 @@ export function sendNewCard(link, name) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            link: `${link}`,
-            name: `${name}`
+            link: link,
+            name: name
         })
+    })
+    .then(res => {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    });
+}
+
+
+// PUT https://nomoreparties.co/v1/plus-cohort-24/cards/likes/5d1f0611d321eb4bdcd707dd
+
+export function createCardLike(cardId) {
+    return fetch(`${apiUrl}/cards/likes/${cardId}`, {
+        method: 'PUT',
+        headers: {
+            authorization: token,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    });
+}
+
+export function deleteCardLike(cardId) {
+    return fetch(`${apiUrl}/cards/likes/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: token,
+            'Content-Type': 'application/json'
+        }
     })
     .then(res => {
         if (res.ok) {

@@ -12,7 +12,12 @@
 	<main>
 		<section class="profile" aria-label="Ваш профиль">
 			<div class="profile__container">
-				<img class="profile__avatar" src="<%=require('../src/images/Profile.png')%>" alt="Ваш аватар">
+				<div class="profile__avatar-container">
+					<div class="profile__avatar_hover">
+						<img class="profile__avatar-pen-image" src="<%=require('../src/images/pen.svg')%>" alt="Изменить аватар">
+					</div>
+					<img class="profile__avatar" src="<%=require('../src/images/Profile.png')%>" alt="Ваш аватар">
+				</div>
 				<div class="profile__info">
 					<h1 class="profile__header">Жак-Ив Кусто</h1>
 					<button class="profile__button profile__button_type_edit" type="button">
@@ -25,8 +30,8 @@
 				<img class="profile__plus-image" src="<%=require('../src/images/plus-sign.svg')%>" alt="Добавить">
 			</button>
 		</section>
+
 		<section class="elements-grid" aria-label="Места">
-			
 			<template id="template-grid">
 				<div class="elements-grid__item">
 					<button class="elements-grid__button-delete" type="button">
@@ -42,9 +47,8 @@
 					</div>
 				</div>
 			</template>
-
-
 		</section>
+		
 		<section class="popup popup_addplace">
 			<div class="popup__container popup__borders">
 				<button class="popup__button popup__button_type_close" type="button">
