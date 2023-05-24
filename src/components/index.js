@@ -60,6 +60,7 @@ window.addEventListener('DOMContentLoaded', function () {
         inputErrorClass: 'form__input_type_error',
         sumbmitButtonClass: 'button[type="submit"]'
     }
+
     enableValidation(validationConfiguration);
 
     // открытие попапа Редактировать профиль
@@ -80,12 +81,12 @@ window.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             profileHeader.textContent = data.name;
             profileDescription.textContent = data.about;
+            closePopup(popupEditProfile);
         })
         .catch((err) => {
             console.log(err);
         })
         .finally(() => {
-            closePopup(popupEditProfile);
             submitButtonProfile.textContent = 'Создать';
         });
     });
@@ -105,13 +106,13 @@ window.addEventListener('DOMContentLoaded', function () {
         updateUserAvatar(formAvatarLink.value)
         .then(data => {
             profileAvatar.src = formAvatarLink.value;
+            closePopup(popupUpdateAvatar);
+            formUpdateAvatar.reset();
         })
         .catch((err) => {
             console.log(err);
         })
         .finally(() => {
-            closePopup(popupUpdateAvatar);
-            formUpdateAvatar.reset();
             submitButtonUpdateAvatar.textContent = 'Сохранить';
         });
         
@@ -133,13 +134,13 @@ window.addEventListener('DOMContentLoaded', function () {
         createCard(formLinkAddPlace.value, formNameAddPlace.value)
         .then(data => {
             insertCard(gridElements, data, userId, cardClickListener, deleteHandler, likeHandler);
+            closePopup(popupAddPlace);
+            formAddPlace.reset();
         })
         .catch((err) => {
             console.log(err);
         })
         .finally(() => {
-            closePopup(popupAddPlace);
-            formAddPlace.reset();
             submitButtonAddPlace.textContent = 'Создать';
         }); 
     });
