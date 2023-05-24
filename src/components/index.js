@@ -49,6 +49,10 @@ window.addEventListener('DOMContentLoaded', function () {
     const formAvatarLink = formUpdateAvatar.querySelector('.form__input_type_description');
     const submitButtonUpdateAvatar = formUpdateAvatar.querySelector('.popup__button_type_save');
 
+    // константы для функционирования попапа Удалить карточку
+    const popupDeleteQuestion = document.querySelector('.popup_delete-question');
+    const buttonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
+
     initPopups();
 
     const validationConfiguration = {
@@ -153,11 +157,10 @@ window.addEventListener('DOMContentLoaded', function () {
         openPopup(popupPhotoPlace);
     }
 
-    const popupDeleteQuestion = document.querySelector('.popup_delete-question');
-    const buttonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
+    
 
     const deleteHandler = (cardId, deleteCallback) => {
-        popupDeleteQuestion.classList.add('popup_opened');
+        openPopup(popupDeleteQuestion);
         buttonPopupDeleteQuestion.addEventListener('click', evt => {
             deleteCard(cardId)
             .then(data => {
@@ -190,18 +193,25 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
     
-    getUserInfo().then(data => {
+    getUserInfo()
+    .then(data => {
         profileHeader.textContent = data.name;
         profileDescription.textContent = data.about;
         profileAvatar.removeAttribute('src');
         profileAvatar.setAttribute('src', data.avatar);
         userId = data._id;
     })
+    .catch((err) => {
+        console.log(err);
+    });
 
     getCards().then(data => {
         data.forEach(item => {
             insertCard(gridElements, item, userId, cardClickListener, deleteHandler, likeHandler);
         });
+    })
+    .catch((err) => {
+        console.log(err);
     });
 
 
