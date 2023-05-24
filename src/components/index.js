@@ -194,28 +194,18 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
     
-    getUserInfo()
-    .then(data => {
+    Promise.all([getUserInfo(), getCards()])
+    .then(([data, cards]) => {
         profileHeader.textContent = data.name;
         profileDescription.textContent = data.about;
         profileAvatar.removeAttribute('src');
         profileAvatar.setAttribute('src', data.avatar);
         userId = data._id;
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-
-    getCards().then(data => {
-        data.forEach(item => {
+        cards.forEach(item => {
             insertCard(gridElements, item, userId, cardClickListener, deleteHandler, likeHandler);
         });
     })
-    .catch((err) => {
+  .catch((err) => {
         console.log(err);
-    });
-
-
-
-    
+    });    
 })
