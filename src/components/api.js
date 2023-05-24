@@ -1,3 +1,5 @@
+import { checkResponse } from "./utils";
+
 const apiUrl = 'https://nomoreparties.co/v1/plus-cohort-24';
 const token = '9f994552-1021-4bba-8b8d-5afcdbc277a4';
 
@@ -27,12 +29,7 @@ export function createCard(link, name) {
             name: name
         })
     })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    .then(checkResponse);
 }
 
 export function deleteCard (cardId) {
@@ -43,12 +40,7 @@ export function deleteCard (cardId) {
             'Content-Type': 'application/json'
         },
     })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    .then(checkResponse);
 }
 
 export function createCardLike(cardId) {
@@ -59,12 +51,7 @@ export function createCardLike(cardId) {
             'Content-Type': 'application/json'
         }
     })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    .then(checkResponse);
 }
 
 export function deleteCardLike(cardId) {
@@ -75,12 +62,7 @@ export function deleteCardLike(cardId) {
             'Content-Type': 'application/json'
         }
     })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    .then(checkResponse);
 }
 
 export function getUserInfo() {
@@ -89,12 +71,7 @@ export function getUserInfo() {
             authorization: token
         }
     })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    .then(checkResponse);
 }
 
 export function updateUserInfo(name, about) {
@@ -109,12 +86,7 @@ export function updateUserInfo(name, about) {
             about: `${about}`
         })
     })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    .then(checkResponse);
 }
 
 export function updateUserAvatar(link) {
@@ -128,10 +100,5 @@ export function updateUserAvatar(link) {
             avatar: link
         })
     })
-    .then(res => {
-        if (res.ok) {
-            return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    .then(checkResponse);
 }
