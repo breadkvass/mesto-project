@@ -99,6 +99,7 @@ window.addEventListener('DOMContentLoaded', function () {
     profileAvatarContainer.addEventListener('click', evt => {
         formAvatarLink.value = '';
         hideInputError(validationConfiguration, formAvatarLink);
+        formUpdateAvatar.querySelector('button[type="submit"]').disabled = true;
         openPopup(popupUpdateAvatar);
     })
 
