@@ -1,14 +1,23 @@
 import '../index.css';
-
+import {handleSubmit} from './utils.js'
 import {insertCard} from './card.js';
-
 import {initPopups, openPopup, closePopup} from './modal.js';
-
 import {enableValidation, hideInputError} from './validate.js'
+import {getCards, getUserInfo, updateUserInfo, createCard, createCardLike, deleteCardLike, deleteCard, updateUserAvatar} from './api.js';
 
-import { getCards, getUserInfo, updateUserInfo, createCard, createCardLike, deleteCardLike, deleteCard, updateUserAvatar } from './api';
+
+const validationConfiguration = {
+    formSelector: '.form',
+    inputSelector: '.form__input',
+    formFieldSelector: '.form__field',
+    inputErrorSelector: '.form__input-error',
+    inputErrorActiveClass: 'form__input-error_active',
+    inputErrorClass: 'form__input_type_error',
+    sumbmitButtonClass: 'button[type="submit"]'
+}
 
 let userId = null;
+let deleteData = null;
 
 window.addEventListener('DOMContentLoaded', function () {
 
@@ -51,19 +60,10 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // константы для функционирования попапа Удалить карточку
     const popupDeleteQuestion = document.querySelector('.popup_delete-question');
+    const formDeleteQuestion = popupDeleteQuestion.querySelector('.form');
     const buttonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
 
     initPopups();
-
-    const validationConfiguration = {
-        formSelector: '.form',
-        inputSelector: '.form__input',
-        formFieldSelector: '.form__field',
-        inputErrorSelector: '.form__input-error',
-        inputErrorActiveClass: 'form__input-error_active',
-        inputErrorClass: 'form__input_type_error',
-        sumbmitButtonClass: 'button[type="submit"]'
-    }
 
     enableValidation(validationConfiguration);
 
@@ -75,28 +75,21 @@ window.addEventListener('DOMContentLoaded', function () {
         hideInputError(validationConfiguration, formDescriptionProfile);
         openPopup(popupEditProfile);
     })
-
+    
     // сохранить профиль
     formProfile.addEventListener('submit', (event) => {
-        event.preventDefault();
-        submitButtonProfile.textContent = 'Сохранение...';
-        // отправка данных на сервер
-        updateUserInfo(formNameProfile.value, formDescriptionProfile.value)
-        .then(data => {
-            profileHeader.textContent = data.name;
-            profileDescription.textContent = data.about;
-            closePopup(popupEditProfile);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-        .finally(() => {
-            submitButtonProfile.textContent = 'Создать';
+        handleSubmit(event, () => {
+            return updateUserInfo(formNameProfile.value, formDescriptionProfile.value)
+                    .then((data) => {
+                        profileHeader.textContent = data.name;
+                        profileDescription.textContent = data.about;
+                        closePopup(popupEditProfile);
+                    });
         });
     });
 
     // открытие попапа Обновить аватар
-    profileAvatarContainer.addEventListener('click', evt => {
+    profileAvatarContainer.addEventListener('click', (event) => {
         formAvatarLink.value = '';
         hideInputError(validationConfiguration, formAvatarLink);
         formUpdateAvatar.querySelector('button[type="submit"]').disabled = true;
@@ -105,23 +98,14 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // обновить аватар
     formUpdateAvatar.addEventListener('submit', (event) => {
-        event.preventDefault();
-        submitButtonUpdateAvatar.textContent = 'Сохранение...';
-        // отправка данных на сервер
-        updateUserAvatar(formAvatarLink.value)
-        .then(data => {
-            profileAvatar.src = formAvatarLink.value;
-            closePopup(popupUpdateAvatar);
-            formUpdateAvatar.reset();
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-        .finally(() => {
-            submitButtonUpdateAvatar.textContent = 'Сохранить';
+        handleSubmit(event, () => {
+            return updateUserAvatar(formAvatarLink.value)
+                    .then((data) => {
+                        profileAvatar.src = data.avatar;
+                        closePopup(popupUpdateAvatar);
+                    });
         });
-        
-    });  
+    });
 
     // открытие попапа Добавить место
     addButton.addEventListener('click', () => {
@@ -133,21 +117,15 @@ window.addEventListener('DOMContentLoaded', function () {
         openPopup(popupAddPlace);
     })
 
+    // Создание карточки
     formAddPlace.addEventListener('submit', (event) => {
-        event.preventDefault();
-        submitButtonAddPlace.textContent = 'Создание...';
-        createCard(formLinkAddPlace.value, formNameAddPlace.value)
-        .then(data => {
-            insertCard(gridElements, data, userId, cardClickListener, deleteHandler, likeHandler);
-            closePopup(popupAddPlace);
-            formAddPlace.reset();
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-        .finally(() => {
-            submitButtonAddPlace.textContent = 'Создать';
-        }); 
+        handleSubmit(event, () => {
+            return createCard(formLinkAddPlace.value, formNameAddPlace.value)
+                    .then((data) => {
+                        insertCard(gridElements, data, userId, cardClickListener, deleteHandler, likeHandler);
+                        closePopup(popupAddPlace);
+                    });
+        }, 'Создание...');
     });
     
     // Функция открытия попапа Фото
@@ -158,21 +136,25 @@ window.addEventListener('DOMContentLoaded', function () {
         openPopup(popupPhotoPlace);
     }
 
-    
-
+    // Функция открытия попапа удаления карточки
     const deleteHandler = (cardId, deleteCallback) => {
+        deleteData = {
+            cardId: cardId,
+            deleteCallback: deleteCallback
+        };
         openPopup(popupDeleteQuestion);
-        buttonPopupDeleteQuestion.addEventListener('click', evt => {
-            deleteCard(cardId)
-            .then(data => {
-                popupDeleteQuestion.classList.remove('popup_opened');
-                deleteCallback();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        })
     }
+
+    // Удаление карточки
+    formDeleteQuestion.addEventListener('submit', (event) => {
+        handleSubmit(event, () => {
+            return deleteCard(deleteData.cardId)
+                    .then(() => {
+                        closePopup(popupDeleteQuestion);
+                        deleteData.deleteCallback();
+                    });
+        }, 'Удаление...');
+    });
 
     const likeHandler = (cardId, liked, likeCallback) => {
         if (liked) {
@@ -205,7 +187,7 @@ window.addEventListener('DOMContentLoaded', function () {
             insertCard(gridElements, item, userId, cardClickListener, deleteHandler, likeHandler);
         });
     })
-  .catch((err) => {
+    .catch((err) => {
         console.log(err);
     });    
 })
