@@ -3,7 +3,7 @@ import {handleSubmit} from './utils.js'
 import {insertCard} from './card.js';
 import {initPopups, openPopup, closePopup} from './modal.js';
 import {enableValidation, hideInputError} from './validate.js'
-import {getCards, getUserInfo, updateUserInfo, createCard, createCardLike, deleteCardLike, deleteCard, updateUserAvatar} from './api.js';
+import { Api } from './api.js';
 
 
 const validationConfiguration = {
@@ -19,7 +19,9 @@ const validationConfiguration = {
 let userId = null;
 let deleteData = null;
 
+
 window.addEventListener('DOMContentLoaded', function () {
+    const api = new Api('https://nomoreparties.co/v1/plus-cohort-24', '9f994552-1021-4bba-8b8d-5afcdbc277a4');
 
     // Константы Профиля
     const profile = document.querySelector('.profile');
@@ -79,7 +81,7 @@ window.addEventListener('DOMContentLoaded', function () {
     // сохранить профиль
     formProfile.addEventListener('submit', (event) => {
         handleSubmit(event, () => {
-            return updateUserInfo(formNameProfile.value, formDescriptionProfile.value)
+            return api.updateUserInfo(formNameProfile.value, formDescriptionProfile.value)
                     .then((data) => {
                         profileHeader.textContent = data.name;
                         profileDescription.textContent = data.about;
@@ -99,7 +101,7 @@ window.addEventListener('DOMContentLoaded', function () {
     // обновить аватар
     formUpdateAvatar.addEventListener('submit', (event) => {
         handleSubmit(event, () => {
-            return updateUserAvatar(formAvatarLink.value)
+            return api.updateUserAvatar(formAvatarLink.value)
                     .then((data) => {
                         profileAvatar.src = data.avatar;
                         closePopup(popupUpdateAvatar);
@@ -120,7 +122,7 @@ window.addEventListener('DOMContentLoaded', function () {
     // Создание карточки
     formAddPlace.addEventListener('submit', (event) => {
         handleSubmit(event, () => {
-            return createCard(formLinkAddPlace.value, formNameAddPlace.value)
+            return api.createCard(formLinkAddPlace.value, formNameAddPlace.value)
                     .then((data) => {
                         insertCard(gridElements, data, userId, cardClickListener, deleteHandler, likeHandler);
                         closePopup(popupAddPlace);
@@ -148,7 +150,7 @@ window.addEventListener('DOMContentLoaded', function () {
     // Удаление карточки
     formDeleteQuestion.addEventListener('submit', (event) => {
         handleSubmit(event, () => {
-            return deleteCard(deleteData.cardId)
+            return api.deleteCard(deleteData.cardId)
                     .then(() => {
                         closePopup(popupDeleteQuestion);
                         deleteData.deleteCallback();
@@ -158,7 +160,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     const likeHandler = (cardId, liked, likeCallback) => {
         if (liked) {
-            deleteCardLike(cardId)
+            api.deleteCardLike(cardId)
             .then(data => {
                 likeCallback(data.likes);
             })
@@ -166,7 +168,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 console.log(err);
             });
         } else {
-            createCardLike(cardId)
+            api.createCardLike(cardId)
             .then(data => {
                 likeCallback(data.likes);
             })
@@ -176,7 +178,7 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
     
-    Promise.all([getUserInfo(), getCards()])
+    Promise.all([api.getUserInfo(), api.getCards()])
     .then(([data, cards]) => {
         profileHeader.textContent = data.name;
         profileDescription.textContent = data.about;
@@ -189,5 +191,5 @@ window.addEventListener('DOMContentLoaded', function () {
     })
     .catch((err) => {
         console.log(err);
-    });    
+    });  
 })
