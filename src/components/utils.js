@@ -1,3 +1,5 @@
+import { EPSILON } from "core-js/core/number";
+
 export function checkResponse(res) {
     if (res.ok) {
         return res.json()
@@ -23,5 +25,40 @@ function renderLoading(isLoading, button, buttonText='Сохранить', loadi
         button.textContent = loadingText
     } else {
         button.textContent = buttonText
+    }
+}
+
+export class UserInfo{
+    constructor(headerSelector, descriptionSelector, avatarSelector){
+        this._header = document.querySelector('.profile').querySelector(headerSelector);
+        this._description = document.querySelector('.profile').querySelector(descriptionSelector);
+        this._avatar = document.querySelector('.profile').querySelector(avatarSelector)
+    }
+
+    getUserInfo(apiFunction){
+        apiFunction()
+        .then((data) =>{
+            this._header.textContent = data.name;
+            this._description.textContent = data.about;
+            this._avatar.removeAttribute('src');
+            this._avatar.setAttribute('src', data.avatar);
+
+            return data;
+        });
+    }
+
+    setUserInfo(header, description, apiFunction){
+        apiFunction(header, description)
+        .then((data) => {
+            this._header.textContent = data.name;
+            this._description.textContent = data.about;
+        });
+    }
+
+    setAvatar(link, apiFunction){
+        apiFunction(link)
+        .then((data) => {
+            this._avatar.src = data.avatar;
+        });
     }
 }

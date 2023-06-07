@@ -1,7 +1,7 @@
 import '../index.css';
-import {handleSubmit} from './utils.js'
+import {handleSubmit, UserInfo} from './utils.js'
 import {insertCard} from './card.js';
-import {initPopups, openPopup, closePopup} from './modal.js';
+import {PopupWithForm, PopupWithImage} from './modal.js';
 import {enableValidation, hideInputError} from './validate.js'
 import {getCards, getUserInfo, updateUserInfo, createCard, createCardLike, deleteCardLike, deleteCard, updateUserAvatar} from './api.js';
 
@@ -30,12 +30,12 @@ window.addEventListener('DOMContentLoaded', function () {
     const profileAvatarContainer = profile.querySelector('.profile__avatar-container');
 
     // константы для функционирования попапа Редактировать профиль
-    const popupEditProfile = document.querySelector('.popup_editprofile');
-    const popupContainerEditProfile = popupEditProfile.querySelector('.popup__container');
-    const formProfile = popupContainerEditProfile.querySelector('.form');
-    const formNameProfile = formProfile.querySelector('.form__input_type_name');
-    const formDescriptionProfile = formProfile.querySelector('.form__input_type_description');
-    const submitButtonProfile = formProfile.querySelector('.popup__button_type_save');
+    // const popupEditProfile = document.querySelector('.popup_editprofile');
+    // const popupContainerEditProfile = popupEditProfile.querySelector('.popup__container');
+    // const formProfile = popupContainerEditProfile.querySelector('.form');
+    // const formNameProfile = formProfile.querySelector('.form__input_type_name');
+    // const formDescriptionProfile = formProfile.querySelector('.form__input_type_description');
+    // const submitButtonProfile = formProfile.querySelector('.popup__button_type_save');
 
     // константы для функционирования попапа Новое место
     const popupAddPlace = document.querySelector('.popup_addplace');
@@ -67,14 +67,28 @@ window.addEventListener('DOMContentLoaded', function () {
 
     enableValidation(validationConfiguration);
 
+    const userInfo = new UserInfo('.profile .profile__header','.profile .profile__description','.profile .profile__avatar');
+    const popupEditProfile = new PopupWithForm('.popup_editprofile', 
+        (event) => handleSubmit(event, userInfo.setUserInfo)
+    ).setEventListeners();
+
+
     // открытие попапа Редактировать профиль
     editButton.addEventListener('click', () => {
-        formNameProfile.value = profileHeader.innerText;
-        hideInputError(validationConfiguration, formNameProfile);
-        formDescriptionProfile.value = profileDescription.innerText;
-        hideInputError(validationConfiguration, formDescriptionProfile);
-        openPopup(popupEditProfile);
+        const ui = userInfo.getUserInfo();
+        const initValus = new Map();
+        initValus.set('form_edit-name',ui.name);
+        initValus.set('form_edit-description-name',ui.about);
+
+        popupEditProfile.open(initValus,(input) => hideInputError(validationConfiguration, input))
     })
+    // editButton.addEventListener('click', () => {
+    //     formNameProfile.value = profileHeader.innerText;
+    //     hideInputError(validationConfiguration, formNameProfile);
+    //     formDescriptionProfile.value = profileDescription.innerText;
+    //     hideInputError(validationConfiguration, formDescriptionProfile);
+    //     openPopup(popupEditProfile);
+    // })
     
     // сохранить профиль
     formProfile.addEventListener('submit', (event) => {
