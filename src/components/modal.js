@@ -62,15 +62,15 @@ export class PopupWithForm extends Popup {
     }
 
     _getInputValues(){
-        return this._form.querySelectorAll('input');
+        return Array.from(this._form.querySelectorAll('input'));
     }
 
     setEventListeners(){
-        this._form.addEventListener('submit', this._formSubmit);
+        this._form.addEventListener('submit',(event) => this._formSubmit(event, this._getInputValues()));
         super.setEventListeners();
     }
 
-    open(initValus, validate){
+    open(validate, initValus){
         this._inputs.forEach(i => {
             if(initValus.has(i.name)){
                 i.value = initValus.get(i.name);
@@ -100,15 +100,15 @@ export class PopupWithForm extends Popup {
 //     });
 // }
 
-// export function openPopup(popup) {
-//     popup.classList.add('popup_opened');
-//     document.addEventListener('keydown', escapeListener);
-// }
+export function openPopup(popup) {
+    popup.classList.add('popup_opened');
+    document.addEventListener('keydown', escapeListener);
+}
 
-// export function closePopup(popup) {
-//     popup.classList.remove('popup_opened');
-//     document.removeEventListener('keydown', escapeListener);
-// }
+export function closePopup(popup) {
+    popup.classList.remove('popup_opened');
+    document.removeEventListener('keydown', escapeListener);
+}
 
 
 

@@ -20,7 +20,7 @@ export function handleSubmit(evt, request, loadingText = "Сохранение..
         .finally(() => renderLoading(false, submitButton, initialText));
 }
 
-function renderLoading(isLoading, button, buttonText='Сохранить', loadingText='Сохранение...') {
+function renderLoading(isLoading, button, buttonText='Сохранить', loadingText = 'Сохранение...') {
     if (isLoading) {
         button.textContent = loadingText
     } else {
@@ -30,9 +30,9 @@ function renderLoading(isLoading, button, buttonText='Сохранить', loadi
 
 export class UserInfo{
     constructor(headerSelector, descriptionSelector, avatarSelector){
-        this._header = document.querySelector('.profile').querySelector(headerSelector);
-        this._description = document.querySelector('.profile').querySelector(descriptionSelector);
-        this._avatar = document.querySelector('.profile').querySelector(avatarSelector)
+        this._header = document.querySelector(headerSelector);
+        this._description = document.querySelector(descriptionSelector);
+        this._avatar = document.querySelector(avatarSelector)
     }
 
     getUserInfo(apiFunction){
@@ -47,15 +47,15 @@ export class UserInfo{
         });
     }
 
-    setUserInfo(header, description, apiFunction){
-        apiFunction(header, description)
-        .then((data) => {
-            this._header.textContent = data.name;
-            this._description.textContent = data.about;
-        });
+    setUserInfo([header, description], apiFunction){
+        return apiFunction(header, description)
+            .then((data) => {
+                this._header.textContent = data.name;
+                this._description.textContent = data.about;
+            });
     }
 
-    setAvatar(link, apiFunction){
+    setAvatar([link], apiFunction){
         apiFunction(link)
         .then((data) => {
             this._avatar.src = data.avatar;
