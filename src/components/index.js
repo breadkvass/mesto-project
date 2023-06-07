@@ -1,6 +1,6 @@
 import '../index.css';
 import {handleSubmit} from './utils.js'
-import {insertCard} from './card.js';
+import { Card } from './card.js';
 import {initPopups, openPopup, closePopup} from './modal.js';
 import {enableValidation, hideInputError} from './validate.js'
 import { Api } from './api.js';
@@ -124,7 +124,7 @@ window.addEventListener('DOMContentLoaded', function () {
         handleSubmit(event, () => {
             return api.createCard(formLinkAddPlace.value, formNameAddPlace.value)
                     .then((data) => {
-                        insertCard(gridElements, data, userId, cardClickListener, deleteHandler, likeHandler);
+                        insertCard(data, cardClickListener, deleteHandler, likeHandler);
                         closePopup(popupAddPlace);
                     });
         }, 'Создание...');
@@ -186,10 +186,16 @@ window.addEventListener('DOMContentLoaded', function () {
         profileAvatar.setAttribute('src', data.avatar);
         userId = data._id;
         cards.forEach(item => {
-            insertCard(gridElements, item, userId, cardClickListener, deleteHandler, likeHandler);
+            insertCard(item, cardClickListener, deleteHandler, likeHandler);
         });
     })
     .catch((err) => {
         console.log(err);
     });  
-})
+});
+
+function insertCard(item, photoClickListener, deleteClickListener, likeClickListener) {
+    const card = new Card('#template-grid', item, userId, photoClickListener, deleteClickListener, likeClickListener);
+    const cardElement = card.generate();
+    document.querySelector('.elements-grid').prepend(cardElement);
+}
