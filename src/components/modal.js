@@ -1,7 +1,6 @@
 class Popup {
      constructor(popupSelector){
         this._element = document.querySelector(popupSelector);
-        this.setEventListeners();
      }
 
      _handleEscClose(evt) {
@@ -21,21 +20,20 @@ class Popup {
     }
 
     open() {
-        _element.classList.add('popup_opened');
+        this._element.classList.add('popup_opened');
         document.addEventListener('keydown', this._handleEscClose);
     }
     
     close() {
-        _element.classList.remove('popup_opened');
+        this._element.classList.remove('popup_opened');
         document.removeEventListener('keydown', this._handleEscClose);
     }
 
     setEventListeners(){
-        this._element.querySelector('.popup__button_type_close').addEventListener('click', () => {
-            this.close();
-        })
+        
+        this._element.querySelector('.popup__button_type_close').addEventListener('click', this.close.bind(this));
 
-        this._element.addEventListener('click', this._closePopupOverlay);
+        this._element.addEventListener('click', this._closePopupOverlay.bind(this));
     }
 }
 
@@ -71,17 +69,19 @@ export class PopupWithForm extends Popup {
     }
 
     open(validate, initValus){
-        this._inputs.forEach(i => {
-            if(initValus.has(i.name)){
-                i.value = initValus.get(i.name);
-                validate(i);
-            }
-        });
+        if(this._getInputValues()){
+            this._getInputValues().forEach(i => {
+                if(initValus.has(i.name)){
+                    i.value = initValus.get(i.name);
+                    validate(i);
+                }
+            });
+        }
         super.open();
     }
 
     close(){
-        this._inputs.forEach(i => i.value = "");
+        this._getInputValues().forEach(i => i.value = "");
         super.close();
     }
 }
@@ -100,15 +100,15 @@ export class PopupWithForm extends Popup {
 //     });
 // }
 
-export function openPopup(popup) {
-    popup.classList.add('popup_opened');
-    document.addEventListener('keydown', escapeListener);
-}
+// export function openPopup(popup) {
+//     popup.classList.add('popup_opened');
+//     document.addEventListener('keydown', escapeListener);
+// }
 
-export function closePopup(popup) {
-    popup.classList.remove('popup_opened');
-    document.removeEventListener('keydown', escapeListener);
-}
+// export function closePopup(popup) {
+//     popup.classList.remove('popup_opened');
+//     document.removeEventListener('keydown', escapeListener);
+// }
 
 
 

@@ -1,4 +1,4 @@
-import { EPSILON } from "core-js/core/number";
+// import { EPSILON } from "core-js/core/number";
 
 export function checkResponse(res) {
     if (res.ok) {
@@ -35,30 +35,36 @@ export class UserInfo{
         this._avatar = document.querySelector(avatarSelector)
     }
 
-    getUserInfo(apiFunction){
+    initUserInfo(apiFunction){
         apiFunction()
-        .then((data) =>{
+        .then((data) => {
             this._header.textContent = data.name;
             this._description.textContent = data.about;
             this._avatar.removeAttribute('src');
             this._avatar.setAttribute('src', data.avatar);
-
-            return data;
+            this._data = {id: data._id, name: data.name, about:data.about, avatar: data.avatar};
         });
     }
 
-    setUserInfo([header, description], apiFunction){
-        return apiFunction(header, description)
-            .then((data) => {
-                this._header.textContent = data.name;
-                this._description.textContent = data.about;
-            });
+    getUserInfo(){
+        return this._data;
     }
 
-    setAvatar([link], apiFunction){
-        apiFunction(link)
-        .then((data) => {
-            this._avatar.src = data.avatar;
-        });
+    updateUserInfo(data) {
+        this._data.name = data.name;
+        this._data.about = data.about;
+
+        this._header.textContent = data.name;
+        this._description.textContent = data.about;
+    };
+
+    updateAvatar (data) {
+        this._data.avatar = data.avatar;
+
+        this._avatar.src = data.avatar;
+    };
+
+    setUserInfo(apiFunction, updateData){
+        return apiFunction().then(updateData(data));
     }
 }

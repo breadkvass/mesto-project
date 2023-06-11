@@ -74,7 +74,7 @@ export function getUserInfo() {
     .then(checkResponse);
 }
 
-export function updateUserInfo(name, about) {
+export function updateUserInfo([name, about]) {
     return fetch(`${apiUrl}/users/me`, {
         method: 'PATCH',
         headers: {
@@ -89,7 +89,7 @@ export function updateUserInfo(name, about) {
     .then(checkResponse);
 }
 
-export function updateUserAvatar(link) {
+export function updateUserAvatar([link]) {
     return fetch(`${apiUrl}/users/me/avatar`, {
         method: 'PATCH',
         headers: {
