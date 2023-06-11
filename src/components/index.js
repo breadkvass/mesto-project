@@ -4,7 +4,7 @@ import { Card } from './card.js';
 import {initPopups, openPopup, closePopup} from './modal.js';
 import { FormValidator } from './validate.js'
 import { Api } from './api.js';
-
+import { Section } from './section.js';
 
 const validationConfiguration = {
     formSelector: '.form',
@@ -18,6 +18,7 @@ const validationConfiguration = {
 
 let userId = null;
 let deleteData = null;
+let cardSection = null;
 
 
 window.addEventListener('DOMContentLoaded', function () {
@@ -121,7 +122,8 @@ window.addEventListener('DOMContentLoaded', function () {
         handleSubmit(event, () => {
             return api.createCard(formLinkAddPlace.value, formNameAddPlace.value)
                     .then((data) => {
-                        insertCard(data, cardClickListener, deleteHandler, likeHandler);
+                        const cardElement = createCard(data);
+                        cardSection.addItem(cardElement);
                         closePopup(popupAddPlace);
                     });
         }, 'Создание...');
@@ -142,6 +144,12 @@ window.addEventListener('DOMContentLoaded', function () {
             deleteCallback: deleteCallback
         };
         openPopup(popupDeleteQuestion);
+    }
+
+    const createCard = (cardData) => {
+        const card = new Card('#template-grid', cardData, userId, cardClickListener, deleteHandler, likeHandler);
+        const cardElement = card.generate();
+        return cardElement;
     }
 
     // Удаление карточки
@@ -182,17 +190,22 @@ window.addEventListener('DOMContentLoaded', function () {
         profileAvatar.removeAttribute('src');
         profileAvatar.setAttribute('src', data.avatar);
         userId = data._id;
-        cards.forEach(item => {
-            insertCard(item, cardClickListener, deleteHandler, likeHandler);
-        });
+
+        cardSection = new Section({
+            items: cards,
+            renderer: item => {
+                return createCard(item);
+            }
+        }, '.elements-grid');
+        
+        cardSection.render();
+
+      
     })
     .catch((err) => {
         console.log(err);
-    });  
-}); 
+    });
 
-function insertCard(item, photoClickListener, deleteClickListener, likeClickListener) {
-    const card = new Card('#template-grid', item, userId, photoClickListener, deleteClickListener, likeClickListener);
-    const cardElement = card.generate();
-    document.querySelector('.elements-grid').prepend(cardElement);
-} 
+
+    
+}); 
