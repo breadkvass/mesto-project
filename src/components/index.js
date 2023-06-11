@@ -2,7 +2,7 @@ import '../index.css';
 import {handleSubmit} from './utils.js'
 import { Card } from './card.js';
 import {initPopups, openPopup, closePopup} from './modal.js';
-import {enableValidation, hideInputError} from './validate.js'
+import { FormValidator } from './validate.js'
 import { Api } from './api.js';
 
 
@@ -37,19 +37,16 @@ window.addEventListener('DOMContentLoaded', function () {
     const formProfile = popupContainerEditProfile.querySelector('.form');
     const formNameProfile = formProfile.querySelector('.form__input_type_name');
     const formDescriptionProfile = formProfile.querySelector('.form__input_type_description');
-    const submitButtonProfile = formProfile.querySelector('.popup__button_type_save');
-
+  
     // константы для функционирования попапа Новое место
     const popupAddPlace = document.querySelector('.popup_addplace');
     const addButton = profile.querySelector('.profile__button_type_add');
     const popupContainerAddPlace = popupAddPlace.querySelector('.popup__container');
-    const formAddPlace = popupContainerAddPlace.querySelector('.form')
-    const formNameAddPlace = formAddPlace.querySelector('.form__input_type_name')
+    const formAddPlace = popupContainerAddPlace.querySelector('.form');
+    const formNameAddPlace = formAddPlace.querySelector('.form__input_type_name');
     const formLinkAddPlace = formAddPlace.querySelector('.form__input_type_description');
-    const submitButtonAddPlace = formAddPlace.querySelector('.popup__button_type_save');
-
+  
     // константы для функционирования попапа Фото
-    const gridElements = document.querySelector('.elements-grid');
     const popupPhotoPlace = document.querySelector('.popup_photo-place');
     const popupPhotoElement = popupPhotoPlace.querySelector('.popup__photo');
     const popupTextElement = popupPhotoPlace.querySelector('.popup__description');
@@ -58,23 +55,24 @@ window.addEventListener('DOMContentLoaded', function () {
     const popupUpdateAvatar = document.querySelector('.popup_update-avatar');
     const formUpdateAvatar = popupUpdateAvatar.querySelector('.form');
     const formAvatarLink = formUpdateAvatar.querySelector('.form__input_type_description');
-    const submitButtonUpdateAvatar = formUpdateAvatar.querySelector('.popup__button_type_save');
 
     // константы для функционирования попапа Удалить карточку
     const popupDeleteQuestion = document.querySelector('.popup_delete-question');
     const formDeleteQuestion = popupDeleteQuestion.querySelector('.form');
-    const buttonPopupDeleteQuestion = popupDeleteQuestion.querySelector('.popup__button_type_save');
 
     initPopups();
 
-    enableValidation(validationConfiguration);
+    // включение валидации для всех форм
+    document.querySelectorAll(validationConfiguration.formSelector).forEach(form => {
+        const validator = new FormValidator(validationConfiguration, form);
+        validator.enableValidation();
+    });
 
     // открытие попапа Редактировать профиль
     editButton.addEventListener('click', () => {
+        formProfile.reset();
         formNameProfile.value = profileHeader.innerText;
-        hideInputError(validationConfiguration, formNameProfile);
         formDescriptionProfile.value = profileDescription.innerText;
-        hideInputError(validationConfiguration, formDescriptionProfile);
         openPopup(popupEditProfile);
     })
     
@@ -92,8 +90,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // открытие попапа Обновить аватар
     profileAvatarContainer.addEventListener('click', (event) => {
+        formUpdateAvatar.reset();
         formAvatarLink.value = '';
-        hideInputError(validationConfiguration, formAvatarLink);
         formUpdateAvatar.querySelector('button[type="submit"]').disabled = true;
         openPopup(popupUpdateAvatar);
     })
@@ -111,10 +109,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // открытие попапа Добавить место
     addButton.addEventListener('click', () => {
+        formAddPlace.reset();
         formNameAddPlace.value = '';
-        hideInputError(validationConfiguration, formNameAddPlace);
         formLinkAddPlace.value = '';
-        hideInputError(validationConfiguration, formLinkAddPlace);
         formAddPlace.querySelector('button[type="submit"]').disabled = true;
         openPopup(popupAddPlace);
     })
@@ -192,10 +189,10 @@ window.addEventListener('DOMContentLoaded', function () {
     .catch((err) => {
         console.log(err);
     });  
-});
+}); 
 
 function insertCard(item, photoClickListener, deleteClickListener, likeClickListener) {
     const card = new Card('#template-grid', item, userId, photoClickListener, deleteClickListener, likeClickListener);
     const cardElement = card.generate();
     document.querySelector('.elements-grid').prepend(cardElement);
-}
+} 
