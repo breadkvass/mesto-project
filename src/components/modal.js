@@ -75,12 +75,11 @@ export class PopupWithForm extends Popup {
         super.setEventListeners();
     }
 
-    open(validate, initValus){
+    open(initValus){
         if(this._getInputs() && initValus){
             this._getInputs().forEach(i => {
                 if(initValus.has(i.name)){
                     i.value = initValus.get(i.name);
-                    validate(i);
                 }
             });
         }
