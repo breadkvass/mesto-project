@@ -1,7 +1,7 @@
 import { checkResponse } from "./utils";
 
 const apiUrl = 'https://nomoreparties.co/v1/plus-cohort-24';
-const token = '9f994552-1021-4bba-8b8d-5afcdbc277a4';
+const token = '68fdd3a9-a749-43e0-ad66-26fdd6a6cb73';
 
 export function getCards() {
     return fetch(`${apiUrl}/cards`, {
@@ -17,7 +17,7 @@ export function getCards() {
     });
 }
 
-export function createCard(link, name) {
+export function createCard(name, link) {
     return fetch(`${apiUrl}/cards`, {
         method: 'POST',
         headers: {

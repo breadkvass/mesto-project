@@ -21,7 +21,7 @@ class Popup {
 
     open() {
         this._element.classList.add('popup_opened');
-        document.addEventListener('keydown', this._handleEscClose);
+        document.addEventListener('keydown', this._handleEscClose.bind(this));
     }
     
     close() {
@@ -45,9 +45,9 @@ export class PopupWithImage extends Popup{
     }
 
     open(link, name) {
-        _popupPhotoElement.src = link;
-        _popupPhotoElement.setAttribute('alt', name);
-        _popupTextElement.textContent = name;
+        this._popupPhotoElement.src = link;
+        this._popupPhotoElement.setAttribute('alt', name);
+        this._popupTextElement.textContent = name;
         super.open();
     }
 }
@@ -59,18 +59,25 @@ export class PopupWithForm extends Popup {
         this._formSubmit = formSubmit;
     }
 
-    _getInputValues(){
+    _getInputsValues(){
+        return this._getInputs().map(i => i.value);
+    }
+
+    _getInputs(){
         return Array.from(this._form.querySelectorAll('input'));
     }
 
     setEventListeners(){
-        this._form.addEventListener('submit',(event) => this._formSubmit(event, this._getInputValues()));
+        this._form.addEventListener('submit', (event) => {
+            this._formSubmit(event, this._getInputsValues())
+            this.close();
+        });
         super.setEventListeners();
     }
 
     open(validate, initValus){
-        if(this._getInputValues()){
-            this._getInputValues().forEach(i => {
+        if(this._getInputs() && initValus){
+            this._getInputs().forEach(i => {
                 if(initValus.has(i.name)){
                     i.value = initValus.get(i.name);
                     validate(i);
@@ -81,7 +88,7 @@ export class PopupWithForm extends Popup {
     }
 
     close(){
-        this._getInputValues().forEach(i => i.value = "");
+        this._getInputs().forEach(i => i.value = "");
         super.close();
     }
 }

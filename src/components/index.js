@@ -71,7 +71,11 @@ window.addEventListener('DOMContentLoaded', function () {
     const userInfo = new UserInfo('.profile .profile__header','.profile .profile__description','.profile .profile__avatar');
 
     //Коллбэк сабмита формы редактирования данных о пользователе
-    const formEditProfileSubmit = (event, inputs) => handleSubmit(event,() => userInfo.setUserInfo(() => updateUserInfo(inputs), popupEditProfile.updateUserInfo));
+    const formEditProfileSubmit = (event, inputs) => {
+        handleSubmit(event,() => userInfo.setUserInfo(() => {
+            return updateUserInfo(inputs)
+        }, userInfo.updateUserInfo))
+    };
 
     const popupEditProfile = new PopupWithForm('.popup_editprofile', formEditProfileSubmit);
     popupEditProfile.setEventListeners();
@@ -86,40 +90,43 @@ window.addEventListener('DOMContentLoaded', function () {
         popupEditProfile.open(validate, initValus)
     });
 
+    const formAvatarSubmit = (event, inputs) => handleSubmit(event,() => userInfo.setUserInfo(() => updateUserAvatar(inputs), userInfo.updateAvatar));
+
     const popupUpdateAvatar = new PopupWithForm('.popup_update-avatar', formAvatarSubmit);
     popupUpdateAvatar.setEventListeners();
-
-    const formAvatarSubmit = (event, inputs) => handleSubmit(event,() => userInfo.setAvatar(() => updateUserAvatar(inputs)), popupUpdateAvatar.updateAvatar);
 
     // открытие попапа Обновить аватар
     profileAvatarContainer.addEventListener('click', () => {
         const initValus = new Map();
-        initValus.set('form_edit-description-name','');
+        initValus.set('form_place-description',userInfo.getUserInfo().avatar);
 
         popupUpdateAvatar.open(validate, initValus)
     })
 
-    const popupAddPlace = new PopupWithForm('.popup_addplace', formAddPlaceSubmit).setEventListeners();
+
+    const popupPhotoPlace = new PopupWithImage('.popup_photo-place');
+    popupPhotoPlace.setEventListeners();
+
+   // Функция открытия попапа Фото
+   const cardClickListener = (link, name) => {
+        popupPhotoPlace.open(link, name)
+    }
 
     const formAddPlaceSubmit = (event, inputs) => {
         handleSubmit(event, () => {
-            [place, link] = inputs;
+            let [place, link] = inputs;
             return createCard(place, link)
                     .then((data) => {
-                        insertCard(gridElements, data, userInfo.getUserInfo().id, cardClickListener, deleteHandler, likeHandler);
+                        insertCard(gridElements, data, userInfo.getUserInfo()._id, cardClickListener, deleteHandler, likeHandler);
                     });
         }, 'Создание...');
     }
 
+    const popupAddPlace = new PopupWithForm('.popup_addplace', formAddPlaceSubmit);
+    popupAddPlace.setEventListeners();
+
     // открытие попапа Добавить место
     addButton.addEventListener('click', () => popupAddPlace.open(validate));
-
-    const popupPhotoPlace = new PopupWithImage('.popup_photo-place').setEventListeners();
-
-    // Функция открытия попапа Фото
-    const cardClickListener = (link, name) => {
-        popupPhotoPlace.open(link, name)
-    }
 
     const validate = (input) => hideInputError(validationConfiguration, input);
 

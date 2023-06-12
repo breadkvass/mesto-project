@@ -60,11 +60,10 @@ export class UserInfo{
 
     updateAvatar (data) {
         this._data.avatar = data.avatar;
-
         this._avatar.src = data.avatar;
     };
 
     setUserInfo(apiFunction, updateData){
-        return apiFunction().then(updateData(data));
+        return apiFunction().then(updateData.bind(this));
     }
 }
