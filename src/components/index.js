@@ -93,7 +93,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const formAddPlaceSubmit = (event, inputs) => {
         handleSubmit(event, () => {
             let [place, link] = inputs;
-            return api.createCard(place, link)
+            return api.createCard(link, place)
                     .then((data) => {
                         const cardElement = createCard(data);
                         cardSection.addItem(cardElement);
@@ -102,7 +102,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     const createCard = (cardData) => {
-        const card = new Card('#template-grid', cardData, userId, cardClickListener, deleteHandler, likeHandler);
+        const card = new Card('#template-grid', cardData, userInfo.getUserInfo().id, cardClickListener, deleteHandler, likeHandler);
         const cardElement = card.generate();
         return cardElement;
     }
@@ -113,7 +113,18 @@ window.addEventListener('DOMContentLoaded', function () {
     // открытие попапа Добавить место
     addButton.addEventListener('click', () => popupAddPlace.open());
 
-    const popupDeleteQuestion = new PopupWithForm('.popup_delete-question', formDeleteQuestionSubmit).setEventListeners();
+    // Удаление карточки
+    const formDeleteQuestionSubmit = (event) => {
+        handleSubmit(event, () => {
+            return api.deleteCard(deleteData.cardId)
+                    .then(() => {
+                        deleteData.deleteCallback();
+                    });
+        }, 'Удаление...');
+    };
+
+    const popupDeleteQuestion = new PopupWithForm('.popup_delete-question', formDeleteQuestionSubmit);
+    popupDeleteQuestion.setEventListeners();
 
     // Функция открытия попапа удаления карточки
     const deleteHandler = (cardId, deleteCallback) => {
@@ -123,17 +134,6 @@ window.addEventListener('DOMContentLoaded', function () {
         };
         popupDeleteQuestion.open();
     }
-
-    // Удаление карточки
-    const formDeleteQuestionSubmit = (event) => {
-        handleSubmit(event, () => {
-            return api.deleteCard(deleteData.cardId)
-                    .then(() => {
-                        popupDeleteQuestion.closePopup();
-                        deleteData.deleteCallback();
-                    });
-        }, 'Удаление...');
-    };
 
     const likeHandler = (cardId, liked, likeCallback) => {
         if (liked) {
@@ -154,8 +154,8 @@ window.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-    
-    userInfo.initUserInfo(api.getUserInfo);
+
+    userInfo.initUserInfo(api.getUserInfo.bind(api))
 
     Promise.all([api.getCards()])
     .then(([cards]) => {

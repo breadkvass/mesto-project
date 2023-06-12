@@ -1,6 +1,6 @@
 export class Section {
     constructor({items, renderer}, selector){
-        this._items = items;
+        this._items = items.reverse();
         this._renderer = renderer;
         this._container = document.querySelector(selector);
     }

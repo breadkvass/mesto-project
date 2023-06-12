@@ -36,7 +36,7 @@ export class UserInfo{
     }
 
     initUserInfo(apiFunction){
-        apiFunction()
+        return apiFunction()
         .then((data) => {
             this._header.textContent = data.name;
             this._description.textContent = data.about;
