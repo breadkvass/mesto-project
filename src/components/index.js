@@ -81,7 +81,6 @@ window.addEventListener('DOMContentLoaded', function () {
         popupUpdateAvatar.open(initValus)
     })
 
-
     const popupPhotoPlace = new PopupWithImage('.popup_photo-place');
     popupPhotoPlace.setEventListeners();
 
