@@ -26,10 +26,8 @@ export class Card {
         this._likeCounter().textContent = this._item.likes.length;
 
         
-        if (this._item.owner._id == this._userId) {
-            this._deleteButton().style.visibility = "visible";
-        } else {
-            this._deleteButton().style.visibility = "hidden";
+        if (this._item.owner._id !== this._userId) {
+            this._deleteButton().remove();
         }
 
         this._likeButton().classList.toggle('elements-grid__button-like_checked', this._hasMyLike(this._item.likes));
@@ -44,7 +42,7 @@ export class Card {
             this._likeHandler();
         });
 
-        this._deleteButton().addEventListener('click', () => {
+        this._deleteButton()?.addEventListener('click', () => {
             this._deleteHandler();
         });
 
