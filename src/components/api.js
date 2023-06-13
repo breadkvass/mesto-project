@@ -13,12 +13,7 @@ export class Api {
                 'Content-Type': 'application/json'
             }
         })
-        .then(res => {
-            if (res.ok) {
-                return res.json()
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
     }
 
     createCard(link, name) {
