@@ -2,13 +2,14 @@ export class FormValidator {
     constructor(conf, form) {
         this._conf = conf;
         this._form = form;
+        this._inputList = Array.from(this._form.querySelectorAll(conf.inputSelector));
+        this._buttonElement = this._form.querySelector(conf.sumbmitButtonClass);
     }
 
     enableValidation() {
         // Включение валидации для всех инпутов формы
-        const inputs = this._form.querySelectorAll(this._conf.inputSelector);
         
-        inputs.forEach(input => {
+        this._inputList.forEach(input => {
             input.addEventListener('input', () => {
                 this._isValid(input);
                 this._isFormValid();
@@ -16,7 +17,7 @@ export class FormValidator {
         });
         
         this._form.addEventListener('reset', () => {
-            inputs.forEach(input => {
+            this._inputList.forEach(input => {
                 this._hideInputError(input);
             });
         });
@@ -31,11 +32,10 @@ export class FormValidator {
     }
 
     _isFormValid() {
-        const inputs =  Array.from(this._form.querySelectorAll(this._conf.inputSelector));
-        const hasInvalidInput = inputs.some(input => {
+        const hasInvalidInput = this._inputList.some(input => {
             return !input.validity.valid;
         });
-        this._form.querySelector(this._conf.sumbmitButtonClass).disabled = hasInvalidInput;
+        this._buttonElement.disabled = hasInvalidInput;
     };
 
     _showInputError(input)  {
