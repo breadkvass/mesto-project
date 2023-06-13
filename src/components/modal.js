@@ -87,8 +87,12 @@ export class PopupWithForm extends Popup {
     }
 
     close(){
-        this._getInputs().forEach(i => i.value = "");
+        this._reset.bind(this);
         super.close();
+    }
+
+    _reset(){
+        this._getInputs().forEach(i => i.value = "");
     }
 }
 
