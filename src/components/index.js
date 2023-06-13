@@ -1,7 +1,9 @@
 import '../index.css';
-import {handleSubmit, UserInfo} from './utils.js'
+import { handleSubmit } from './utils.js'
+import { UserInfo } from './UserInfo.js'
 import { Card } from './card.js';
-import {PopupWithForm, PopupWithImage} from './modal.js';
+import { PopupWithForm } from './PopupWithForm.js';
+import { PopupWithImage } from './PopupWithImage.js';
 import { FormValidator } from './validate.js'
 import { Api } from './api.js';
 import { Section } from './section.js';
@@ -17,7 +19,6 @@ const validationConfiguration = {
     sumbmitButtonClass: 'button[type="submit"]'
 }
 
-let userId = null;
 let deleteData = null;
 let cardSection = null;
 
