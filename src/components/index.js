@@ -1,10 +1,15 @@
 import '../index.css';
-import {handleSubmit, UserInfo} from './utils.js'
+import { handleSubmit } from './utils.js'
 import { Card } from './card.js';
-import {PopupWithForm, PopupWithImage} from './modal.js';
 import { FormValidator } from './validate.js'
 import { Api } from './api.js';
 import { Section } from './section.js';
+import { PopupWithForm } from './PopupWithForm.js';
+import { PopupWithImage } from './PopupWithImage.js';
+import { UserInfo } from './UserInfo.js';
+
+
+
 
 
 const validationConfiguration = {
