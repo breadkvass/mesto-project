@@ -5,7 +5,7 @@ import { Card } from './Card.js';
 import { PopupWithForm } from './PopupWithForm.js';
 import { PopupWithImage } from './PopupWithImage.js';
 import { FormValidator } from './FormValidator.js'
-import { Api } from './api.js';
+import { Api } from './Api.js';
 import { Section } from './Section.js';
 
 
