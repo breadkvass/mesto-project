@@ -11,4 +11,4 @@
 ## GitHub
 Проект размещен на GitHub Pages https://breadkvass.github.io/mesto-project/
 
-gOlotinanina@yandex.ru  https://github.com/breadkvass/mesto-project.git
+Работа в паре: gOlotinanina@yandex.ru  https://github.com/breadkvass/mesto-project.git
