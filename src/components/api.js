@@ -1,5 +1,3 @@
-import { checkResponse } from "./utils";
-
 export class Api {
     constructor(baseUrl, token) {
       this.baseUrl = baseUrl;
@@ -13,7 +11,7 @@ export class Api {
                 'Content-Type': 'application/json'
             }
         })
-        .then(checkResponse);
+        .then(this._checkResponse);
     }
 
     createCard(link, name) {
@@ -28,7 +26,7 @@ export class Api {
                 name: name
             })
         })
-        .then(checkResponse);
+        .then(this._checkResponse);
     }
 
     deleteCard(cardId) {
@@ -39,7 +37,7 @@ export class Api {
                 'Content-Type': 'application/json'
             },
         })
-        .then(checkResponse);
+        .then(this._checkResponse);
     }
 
     createCardLike(cardId) {
@@ -50,7 +48,7 @@ export class Api {
                 'Content-Type': 'application/json'
             }
         })
-        .then(checkResponse);
+        .then(this._checkResponse);
     }
 
     deleteCardLike(cardId) {
@@ -61,7 +59,7 @@ export class Api {
                 'Content-Type': 'application/json'
             }
         })
-        .then(checkResponse);
+        .then(this._checkResponse);
     }
 
     getUserInfo() {
@@ -70,7 +68,7 @@ export class Api {
                 authorization: this.token
             }
         })
-        .then(checkResponse);
+        .then(this._checkResponse);
     }
     
     updateUserInfo([name, about]) {
@@ -85,7 +83,7 @@ export class Api {
                 about: `${about}`
             })
         })
-        .then(checkResponse);
+        .then(this._checkResponse);
     }
     
     updateUserAvatar(link) {
@@ -99,7 +97,13 @@ export class Api {
                 avatar: link
             })
         })
-        .then(checkResponse);
+        .then(this._checkResponse);
     }
-    
+
+    _checkResponse(res) {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    }
 }

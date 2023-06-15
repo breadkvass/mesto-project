@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     //Коллбэк сабмита формы редактирования данных о пользователе
     const formEditProfileSubmit = (event, inputs) => {
-        handleSubmit(event,() => userInfo.setUserInfo(() => {
+        return handleSubmit(event,() => userInfo.setUserInfo(() => {
             return api.updateUserInfo(inputs)
         }, userInfo.updateUserInfo))
     };
@@ -62,12 +62,14 @@ window.addEventListener('DOMContentLoaded', function () {
         initValus.set('form_edit-name', data.name);
         initValus.set('form_edit-description', data.about);
 
-        popupEditProfile.open(initValus)
+        popupEditProfile.openWithInitValues(initValus)
     });
 
     const formAvatarSubmit = (event, inputs) => {
-        handleSubmit(event,() => {
-            return userInfo.setUserInfo(() => api.updateUserAvatar(inputs), userInfo.updateAvatar)
+        return handleSubmit(event,() => {
+            return userInfo.setUserInfo(() => {
+                return api.updateUserAvatar(inputs)
+            }, userInfo.updateAvatar)
         })
     };
 
@@ -79,7 +81,7 @@ window.addEventListener('DOMContentLoaded', function () {
         const initValus = new Map();
         initValus.set('form_place-description',userInfo.getUserInfo().avatar);
 
-        popupUpdateAvatar.open(initValus)
+        popupUpdateAvatar.openWithInitValues(initValus)
     })
 
     const popupPhotoPlace = new PopupWithImage('.popup_photo-place');
@@ -91,7 +93,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     const formAddPlaceSubmit = (event, inputs) => {
-        handleSubmit(event, () => {
+        return handleSubmit(event, () => {
             let [place, link] = inputs;
             return api.createCard(link, place)
                     .then((data) => {
@@ -115,7 +117,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Удаление карточки
     const formDeleteQuestionSubmit = (event) => {
-        handleSubmit(event, () => {
+        return handleSubmit(event, () => {
             return api.deleteCard(deleteData.cardId)
                     .then(() => {
                         deleteData.deleteCallback();
@@ -155,9 +157,9 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    userInfo.initUserInfo(api.getUserInfo.bind(api))
+    
 
-    Promise.all([api.getCards()])
+    Promise.all([api.getCards(), userInfo.initUserInfo(api.getUserInfo.bind(api))])
     .then(([cards]) => {
         cardSection = new Section({
             items: cards,

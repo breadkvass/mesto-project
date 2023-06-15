@@ -17,13 +17,12 @@ export class PopupWithForm extends Popup {
 
     setEventListeners(){
         this._form.addEventListener('submit', (event) => {
-            this._formSubmit(event, this._getInputsValues())
-            this.close();
+            this._formSubmit(event, this._getInputsValues()).then(this.close.bind(this));
         });
         super.setEventListeners();
     }
 
-    open(initValus){
+    openWithInitValues(initValus){
         if(this._getInputs() && initValus){
             this._getInputs().forEach(i => {
                 if(initValus.has(i.name)){
@@ -35,11 +34,7 @@ export class PopupWithForm extends Popup {
     }
 
     close(){
-        this._reset.bind(this);
+        this._form.reset();
         super.close();
-    }
-
-    _reset(){
-        this._getInputs().forEach(i => i.value = "");
     }
 }
