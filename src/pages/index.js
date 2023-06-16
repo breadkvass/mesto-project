@@ -1,12 +1,12 @@
-import '../index.css';
-import { handleSubmit } from './utils.js'
-import { UserInfo } from './UserInfo.js'
-import { Card } from './Card.js';
-import { PopupWithForm } from './PopupWithForm.js';
-import { PopupWithImage } from './PopupWithImage.js';
-import { FormValidator } from './FormValidator.js'
-import { Api } from './Api.js';
-import { Section } from './Section.js';
+import './index.css';
+import { handleSubmit } from '../utils/utils.js'
+import { UserInfo } from '../components/UserInfo.js'
+import { Card } from '../components/Card.js';
+import { PopupWithForm } from '../components/PopupWithForm.js';
+import { PopupWithImage } from '../components/PopupWithImage.js';
+import { FormValidator } from '../components/FormValidator.js'
+import { Api } from '../components/Api.js';
+import { Section } from '../components/Section.js';
 
 
 const validationConfiguration = {
@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function () {
     //Коллбэк сабмита формы редактирования данных о пользователе
     const formEditProfileSubmit = (event, inputs) => {
         return handleSubmit(event,() => userInfo.setUserInfo(() => {
-            return api.updateUserInfo(inputs)
+            return api.updateUserInfo(inputs[0], inputs[1])
         }, userInfo.updateUserInfo))
     };
 
@@ -62,13 +62,14 @@ window.addEventListener('DOMContentLoaded', function () {
         initValus.set('form_edit-name', data.name);
         initValus.set('form_edit-description', data.about);
 
+        popupEditProfile.disabledSubmitButton();
         popupEditProfile.openWithInitValues(initValus)
     });
 
     const formAvatarSubmit = (event, inputs) => {
         return handleSubmit(event,() => {
             return userInfo.setUserInfo(() => {
-                return api.updateUserAvatar(inputs)
+                return api.updateUserAvatar(inputs[0])
             }, userInfo.updateAvatar)
         })
     };
@@ -78,7 +79,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // открытие попапа Обновить аватар
     profileAvatarContainer.addEventListener('click', () => {
-        popupUpdateAvatar.openWithInitValues()
+        popupUpdateAvatar.disabledSubmitButton();
+        popupUpdateAvatar.openWithInitValues();
     })
 
     const popupPhotoPlace = new PopupWithImage('.popup_photo-place');
@@ -110,7 +112,10 @@ window.addEventListener('DOMContentLoaded', function () {
     popupAddPlace.setEventListeners();
 
     // открытие попапа Добавить место
-    addButton.addEventListener('click', () => popupAddPlace.open());
+    addButton.addEventListener('click', () => {
+        popupAddPlace.disabledSubmitButton();
+        popupAddPlace.open();
+    });
 
     // Удаление карточки
     const formDeleteQuestionSubmit = (event) => {

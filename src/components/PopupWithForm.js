@@ -5,6 +5,7 @@ export class PopupWithForm extends Popup {
         super(popupSelector)
         this._form = this._element.querySelector('.form');
         this._formSubmit = formSubmit;
+        this._buttonElement = this._element.querySelector('.popup__button_type_save');
     }
 
     _getInputsValues(){
@@ -22,7 +23,7 @@ export class PopupWithForm extends Popup {
         super.setEventListeners();
     }
 
-    openWithInitValues(initValus){
+    openWithInitValues(initValus, ){
         if(this._getInputs() && initValus){
             this._getInputs().forEach(i => {
                 if(initValus.has(i.name)){
@@ -31,6 +32,10 @@ export class PopupWithForm extends Popup {
             });
         }
         super.open();
+    }
+
+    disabledSubmitButton() {
+        this._buttonElement.disabled = true;
     }
 
     close(){
