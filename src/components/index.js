@@ -78,10 +78,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // открытие попапа Обновить аватар
     profileAvatarContainer.addEventListener('click', () => {
-        const initValus = new Map();
-        initValus.set('form_place-description',userInfo.getUserInfo().avatar);
-
-        popupUpdateAvatar.openWithInitValues(initValus)
+        popupUpdateAvatar.openWithInitValues()
     })
 
     const popupPhotoPlace = new PopupWithImage('.popup_photo-place');
