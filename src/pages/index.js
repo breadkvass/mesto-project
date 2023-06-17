@@ -46,9 +46,10 @@ window.addEventListener('DOMContentLoaded', function () {
     const userInfo = new UserInfo('.profile .profile__header','.profile .profile__description','.profile .profile__avatar');
 
     //Коллбэк сабмита формы редактирования данных о пользователе
-    const formEditProfileSubmit = (event, inputs) => {
+    const formEditProfileSubmit = (event, inputs, callback) => {
         return handleSubmit(event,() => userInfo.setUserInfo(() => {
             return api.updateUserInfo(inputs[0], inputs[1])
+            .then(() => callback());
         }, userInfo.updateUserInfo))
     };
 
@@ -66,10 +67,11 @@ window.addEventListener('DOMContentLoaded', function () {
         popupEditProfile.openWithInitValues(initValus)
     });
 
-    const formAvatarSubmit = (event, inputs) => {
+    const formAvatarSubmit = (event, inputs, callback) => {
         return handleSubmit(event,() => {
             return userInfo.setUserInfo(() => {
                 return api.updateUserAvatar(inputs[0])
+                .then(() => callback());
             }, userInfo.updateAvatar)
         })
     };
@@ -91,14 +93,15 @@ window.addEventListener('DOMContentLoaded', function () {
         popupPhotoPlace.open(link, name)
     }
 
-    const formAddPlaceSubmit = (event, inputs) => {
+    const formAddPlaceSubmit = (event, inputs, callback) => {
         return handleSubmit(event, () => {
             let [place, link] = inputs;
             return api.createCard(link, place)
                     .then((data) => {
                         const cardElement = createCard(data);
                         cardSection.addItem(cardElement);
-                    });
+                    })
+                    .then(() => callback());
         }, 'Создание...');
     }
 

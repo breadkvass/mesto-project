@@ -7,12 +7,13 @@ export function handleSubmit(evt, request, loadingText = "Сохранение..
     const initialText = submitButton.textContent;
     renderLoading(true, submitButton, initialText, loadingText);
 
-    return request()
+    request()
         .then(() => evt.target.reset())
-        .then(() => renderLoading(false, submitButton, initialText));
+        .catch((err) => console.error(`Ошибка: ${err}`))
+        .finally(() => renderLoading(false, submitButton, initialText));
 }
 
-function renderLoading(isLoading, button, buttonText='Сохранить', loadingText = 'Сохранение...') {
+function renderLoading(isLoading, button, buttonText='Сохранить', loadingText='Сохранение...') {
     if (isLoading) {
         button.textContent = loadingText
     } else {
