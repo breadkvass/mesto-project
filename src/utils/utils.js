@@ -1,10 +1,5 @@
-export function checkResponse(res) {
-    if (res.ok) {
-        return res.json()
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-}
-  
+// import { EPSILON } from "core-js/core/number";
+
 export function handleSubmit(evt, request, loadingText = "Сохранение...") {
     evt.preventDefault();
 
