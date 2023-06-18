@@ -1,6 +1,7 @@
 import './index.css';
 import { handleSubmit } from '../utils/utils.js'
 import { UserInfo } from '../components/UserInfo.js'
+import { Avatar } from '../components/Avatar.js'
 import { Card } from '../components/Card.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
@@ -19,22 +20,25 @@ const validationConfiguration = {
     sumbmitButtonClass: 'button[type="submit"]'
 }
 
-let deleteData = null;
+let userId = null;
 let cardSection = null;
 
 window.addEventListener('DOMContentLoaded', function () {
 
-    // Константы Профиля
+    // Кнопка редактирования профиля
     const editButton = document.querySelector('.profile .profile__button_type_edit');
+
+    // Кнопка редактирования аватара
     const profileAvatarContainer = document.querySelector('.profile__avatar-container');
 
-    // константы для функционирования попапа Новое место
+    // Кнопка открытия попапа добавления места
     const addButton = document.querySelector('.profile .profile__button_type_add');
 
-    // константы для функционирования попапа Фото
-    const gridElements = document.querySelector('.elements-grid');
-
     const api = new Api('https://nomoreparties.co/v1/plus-cohort-24', '9f994552-1021-4bba-8b8d-5afcdbc277a4');
+
+    //Данные о пользователе
+    const userInfo = new UserInfo('.profile .profile__header', '.profile .profile__description');
+    const avatar = new Avatar('.profile .profile__avatar');
 
     // включение валидации для всех форм
     document.querySelectorAll(validationConfiguration.formSelector).forEach(form => {
@@ -42,41 +46,44 @@ window.addEventListener('DOMContentLoaded', function () {
         validator.enableValidation();
     });
 
-    //Данные о пользователе
-    const userInfo = new UserInfo('.profile .profile__header','.profile .profile__description','.profile .profile__avatar');
-
-    //Коллбэк сабмита формы редактирования данных о пользователе
-    const formEditProfileSubmit = (event, inputs, callback) => {
-        return handleSubmit(event,() => userInfo.setUserInfo(() => {
-            return api.updateUserInfo(inputs[0], inputs[1])
-            .then(() => callback());
-        }, userInfo.updateUserInfo))
-    };
-
-    const popupEditProfile = new PopupWithForm('.popup_editprofile', formEditProfileSubmit);
+    // Попап редактирования данных о пользователе
+    const popupEditProfile = new PopupWithForm('.popup_editprofile');
+    popupEditProfile.setSubmitHandler((event, inputs) => {
+        return handleSubmit(event, () => {
+            const [name, about] = inputs;
+            return api.updateUserInfo(name, about)
+                .then(data => {
+                    userInfo.setUserInfo(data);
+                    popupEditProfile.close();
+                });
+        })
+    });
     popupEditProfile.setEventListeners();
 
     // открытие попапа Редактировать профиль
     editButton.addEventListener('click', () => {
-        let data = userInfo.getUserInfo();
-        const initValus = new Map();
-        initValus.set('form_edit-name', data.name);
-        initValus.set('form_edit-description', data.about);
+        const {name, about} = userInfo.getUserInfo();
+        const initValus = new Map([
+            ['form_edit-name', name],
+            ['form_edit-description', about]
+        ]);
 
         popupEditProfile.disabledSubmitButton();
         popupEditProfile.openWithInitValues(initValus)
     });
 
-    const formAvatarSubmit = (event, inputs, callback) => {
-        return handleSubmit(event,() => {
-            return userInfo.setUserInfo(() => {
-                return api.updateUserAvatar(inputs[0])
-                .then(() => callback());
-            }, userInfo.updateAvatar)
-        })
-    };
-
-    const popupUpdateAvatar = new PopupWithForm('.popup_update-avatar', formAvatarSubmit);
+    // Попап редактирования Аватара
+    const popupUpdateAvatar = new PopupWithForm('.popup_update-avatar');
+    popupUpdateAvatar.setSubmitHandler((event, inputs) => {
+        return handleSubmit(event, () => {
+            const [link] = inputs;
+            return api.updateUserAvatar(link)
+                .then(data => {
+                    avatar.setLink(data.avatar);
+                    popupUpdateAvatar.close();
+                });
+        });
+    });
     popupUpdateAvatar.setEventListeners();
 
     // открытие попапа Обновить аватар
@@ -93,25 +100,24 @@ window.addEventListener('DOMContentLoaded', function () {
         popupPhotoPlace.open(link, name)
     }
 
-    const formAddPlaceSubmit = (event, inputs, callback) => {
-        return handleSubmit(event, () => {
-            let [place, link] = inputs;
-            return api.createCard(link, place)
-                    .then((data) => {
-                        const cardElement = createCard(data);
-                        cardSection.addItem(cardElement);
-                    })
-                    .then(() => callback());
-        }, 'Создание...');
-    }
-
     const createCard = (cardData) => {
-        const card = new Card('#template-grid', cardData, userInfo.getUserInfo().id, cardClickListener, deleteHandler, likeHandler);
+        const card = new Card('#template-grid', cardData, userId, cardClickListener, deleteHandler, likeHandler);
         const cardElement = card.generate();
         return cardElement;
     }
 
-    const popupAddPlace = new PopupWithForm('.popup_addplace', formAddPlaceSubmit);
+    const popupAddPlace = new PopupWithForm('.popup_addplace');
+    popupAddPlace.setSubmitHandler((event, inputs) => {
+        return handleSubmit(event, () => {
+            const [place, link] = inputs;
+            return api.createCard(link, place)
+                    .then((data) => {
+                        const cardElement = createCard(data);
+                        cardSection.addItem(cardElement);
+                        popupAddPlace.close();
+                    });
+        }, 'Создание...');
+    });
     popupAddPlace.setEventListeners();
 
     // открытие попапа Добавить место
@@ -120,25 +126,21 @@ window.addEventListener('DOMContentLoaded', function () {
         popupAddPlace.open();
     });
 
-    // Удаление карточки
-    const formDeleteQuestionSubmit = (event) => {
-        return handleSubmit(event, () => {
-            return api.deleteCard(deleteData.cardId)
-                    .then(() => {
-                        deleteData.deleteCallback();
-                    });
-        }, 'Удаление...');
-    };
-
-    const popupDeleteQuestion = new PopupWithForm('.popup_delete-question', formDeleteQuestionSubmit);
+    // Попап удаления карточки
+    const popupDeleteQuestion = new PopupWithForm('.popup_delete-question');
     popupDeleteQuestion.setEventListeners();
 
     // Функция открытия попапа удаления карточки
     const deleteHandler = (cardId, deleteCallback) => {
-        deleteData = {
-            cardId: cardId,
-            deleteCallback: deleteCallback
-        };
+        popupDeleteQuestion.setSubmitHandler((event) => {
+            return handleSubmit(event, () => {
+                return api.deleteCard(cardId)
+                        .then(() => {
+                            deleteCallback();
+                            popupDeleteQuestion.close();
+                        })
+            }, 'Удаление...');
+        });
         popupDeleteQuestion.open();
     }
 
@@ -161,21 +163,21 @@ window.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-
     
-
-    Promise.all([api.getCards(), userInfo.initUserInfo(api.getUserInfo.bind(api))])
-    .then(([cards]) => {
-        cardSection = new Section({
-            items: cards,
-            renderer: item => {
-                return createCard(item);
-            }
-        }, '.elements-grid');
-        
-        cardSection.render();
-    })
-    .catch((err) => {
-        console.log(err);
-    });    
+    Promise.all([api.getUserInfo(), api.getCards()])
+        .then(([userData, cards]) => {
+            userId = userData._id;
+            userInfo.setUserInfo(userData);
+            avatar.setLink(userData.avatar);
+            cardSection = new Section({
+                items: cards,
+                renderer: item => {
+                    return createCard(item);
+                }
+            }, '.elements-grid');
+            cardSection.render();
+        })
+        .catch((err) => {
+            console.log(err);
+        });    
 });

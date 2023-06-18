@@ -1,31 +1,31 @@
 import {Popup} from './Popup';
 
 export class PopupWithForm extends Popup {
-    constructor(popupSelector, formSubmit){
+    constructor(popupSelector){
         super(popupSelector)
         this._form = this._element.querySelector('.form');
-        this._formSubmit = formSubmit;
+        this._inputs = Array.from(this._form.querySelectorAll('input'));
         this._buttonElement = this._element.querySelector('.popup__button_type_save');
     }
 
-    _getInputsValues(){
-        return this._getInputs().map(i => i.value);
+    _getInputsValues() {
+        return this._inputs.map(i => i.value);
     }
 
-    _getInputs(){
-        return Array.from(this._form.querySelectorAll('input'));
+    setSubmitHandler(formSubmitHandler) {
+        this._formSubmitHandler = formSubmitHandler;
     }
 
-    setEventListeners(){
+    setEventListeners() {
         this._form.addEventListener('submit', (event) => {
-            this._formSubmit(event, this._getInputsValues(), this.close.bind(this));
+            this._formSubmitHandler(event, this._getInputsValues());
         });
         super.setEventListeners();
     }
 
-    openWithInitValues(initValus, ){
-        if(this._getInputs() && initValus){
-            this._getInputs().forEach(i => {
+    openWithInitValues(initValus) {
+        if (this._inputs && initValus){
+            this._inputs.forEach(i => {
                 if(initValus.has(i.name)){
                     i.value = initValus.get(i.name);
                 }
@@ -38,7 +38,7 @@ export class PopupWithForm extends Popup {
         this._buttonElement.disabled = true;
     }
 
-    close(){
+    close() {
         this._form.reset();
         super.close();
     }
